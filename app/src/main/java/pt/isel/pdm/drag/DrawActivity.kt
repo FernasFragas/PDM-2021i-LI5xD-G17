@@ -33,5 +33,5 @@ class DrawActivity : AppCompatActivity() {
             }
             true
         }
-        }
     }
+}
