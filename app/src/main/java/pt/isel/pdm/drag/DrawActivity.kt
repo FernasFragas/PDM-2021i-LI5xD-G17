@@ -7,6 +7,7 @@ import pt.isel.pdm.drag.databinding.ActivityDrawBinding
 import pt.isel.pdm.drag.model.Draws
 import pt.isel.pdm.drag.model.Lines
 import pt.isel.pdm.drag.model.Position
+import pt.isel.pdm.drag.startActivity.StartModel
 
 /**
  * Activity referent for drawing
@@ -16,6 +17,15 @@ class DrawActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityDrawBinding.inflate(layoutInflater)
+
+
+        val playerCount = intent.getIntExtra(Keys.PLAYER_COUNT_KEY.name, 0)
+        val roundCount = intent.getIntExtra(Keys.ROUND_COUNT_KEY.name, 0)
+
+
+
+
+
         setContentView(binding.root)
         var start = Position()
         var drawsM = Draws()

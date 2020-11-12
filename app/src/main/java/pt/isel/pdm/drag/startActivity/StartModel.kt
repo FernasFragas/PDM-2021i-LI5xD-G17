@@ -1,8 +1,5 @@
 package pt.isel.pdm.drag.startActivity
 
-import android.os.Parcelable
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 const val MAX_PLAYERS = 10
@@ -12,11 +9,7 @@ const val MIN_ROUNDS = 5
 private const val DEFAULT_PLAYER_COUNT = 6
 private const val DEFAULT_ROUND_COUNT = 6
 
-class StartModel(var playerCount : Int = DEFAULT_PLAYER_COUNT, var roundCount : Int = DEFAULT_ROUND_COUNT) : ViewModel(){
-
-    val StartModel : MutableLiveData<StartModel> by lazy {
-        MutableLiveData<StartModel>(StartModel())
-    }
+class StartModel(var playerCount : Int = DEFAULT_PLAYER_COUNT, var roundCount : Int = DEFAULT_ROUND_COUNT) : ViewModel() {
 
     fun addPlayer(){
         playerCount++
@@ -41,5 +34,12 @@ class StartModel(var playerCount : Int = DEFAULT_PLAYER_COUNT, var roundCount : 
         if (roundCount < MIN_ROUNDS)
             roundCount = MIN_ROUNDS
     }
+    /*
+    companion object {
+
+        val instance: StartModel by lazy { StartModel() }
+    }
+
+     */
 }
 

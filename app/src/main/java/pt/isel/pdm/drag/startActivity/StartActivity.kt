@@ -1,10 +1,13 @@
 package pt.isel.pdm.drag.startActivity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import pt.isel.pdm.drag.DrawActivity
+import pt.isel.pdm.drag.Keys
 import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityStartLayoutBinding
 
@@ -16,39 +19,45 @@ class StartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start_layout)
 
-        val model = StartModel by viewModels()
+        val viewModel by viewModels<StartModel>()
 
-        reactToPlayerCount(model)
-        reactToRoundCount(model)
-        setListeners(model)
+        reactToPlayerCount(viewModel)
+        reactToRoundCount(viewModel)
+        setListeners(viewModel)
 
         setContentView(binding.root)
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setListeners(model: StartModel) {
-        binding.addPlayer.setOnTouchListener { _, _ ->
+        binding.addPlayer.setOnClickListener {
             model.addPlayer()
             reactToPlayerCount(model)
-            true
         }
-        binding.removePlayer.setOnTouchListener { _, _ ->
+
+        binding.removePlayer.setOnClickListener {
             model.removePlayer()
             reactToPlayerCount(model)
-            true
         }
 
-        binding.addRound.setOnTouchListener { _, _ ->
+        binding.addRound.setOnClickListener {
             model.addRound()
             reactToRoundCount(model)
-
-            true
         }
-        binding.removeRound.setOnTouchListener { _, _ ->
+
+        binding.removeRound.setOnClickListener {
             model.removeRound()
             reactToRoundCount(model)
-            true
         }
+
+        binding.start.setOnClickListener {
+            val intent = Intent(this, DrawActivity::class.java).apply {
+                putExtra(Keys.PLAYER_COUNT_KEY.name, model.playerCount)
+                putExtra(Keys.ROUND_COUNT_KEY.name, model.roundCount)
+            }
+            startActivity(intent)
+        }
+
     }
 
 
