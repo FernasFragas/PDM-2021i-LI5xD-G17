@@ -11,4 +11,8 @@
     <string name="round_count">Rondas:</string>
     <string name="player_count">Jogadores:</string>
     <string name="start">Começar</string>
+
+    <string name="hint">Pista</string>
+    <string name="guess">Adivinha</string>
+    <string name="sub">Submeter</string>
 </resources>

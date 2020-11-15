@@ -1,13 +1,13 @@
-package pt.isel.pdm.drag
+package pt.isel.pdm.drag.draw_activity
 
 import android.os.Bundle
 import android.view.MotionEvent.*
 import androidx.appcompat.app.AppCompatActivity
+import pt.isel.pdm.drag.Keys
 import pt.isel.pdm.drag.databinding.ActivityDrawBinding
 import pt.isel.pdm.drag.model.Draws
 import pt.isel.pdm.drag.model.Lines
 import pt.isel.pdm.drag.model.Position
-import pt.isel.pdm.drag.startActivity.StartModel
 
 /**
  * Activity referent for drawing

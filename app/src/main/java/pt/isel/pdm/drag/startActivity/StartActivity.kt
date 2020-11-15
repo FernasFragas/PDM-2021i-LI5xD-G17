@@ -6,10 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
-import pt.isel.pdm.drag.DrawActivity
 import pt.isel.pdm.drag.Keys
 import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityStartLayoutBinding
+import pt.isel.pdm.drag.draw_activity.DrawActivity
 
 class StartActivity : AppCompatActivity() {
 
