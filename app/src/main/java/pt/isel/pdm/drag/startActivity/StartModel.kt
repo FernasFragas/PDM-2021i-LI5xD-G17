@@ -13,33 +13,18 @@ class StartModel(var playerCount : Int = DEFAULT_PLAYER_COUNT, var roundCount : 
 
     fun addPlayer(){
         playerCount++
-        if (playerCount > MAX_PLAYERS)
-            playerCount = MAX_PLAYERS
     }
 
     fun removePlayer(){
         playerCount--
-        if (playerCount < MIN_PLAYERS)
-            playerCount = MIN_PLAYERS
     }
 
     fun addRound(){
         roundCount++
-        if (roundCount > MAX_ROUNDS)
-            roundCount = MAX_ROUNDS
     }
 
     fun removeRound(){
         roundCount--
-        if (roundCount < MIN_ROUNDS)
-            roundCount = MIN_ROUNDS
     }
-    /*
-    companion object {
-
-        val instance: StartModel by lazy { StartModel() }
-    }
-
-     */
 }
 
