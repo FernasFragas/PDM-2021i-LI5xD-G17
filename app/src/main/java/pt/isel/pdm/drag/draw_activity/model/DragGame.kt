@@ -2,11 +2,12 @@ package pt.isel.pdm.drag.draw_activity.model
 
 class DragGame (val playersNum: Int, val rounds: Int) {
 
-    private val players = arrayOf<DragDraw>()
+    private val players = Array(playersNum) { DragDraw() }  //declaração de array
+    var currentID = 0
 
 
-
-    fun savePlayer(id: Int, dragDraw: DragDraw) {
-        players[id] = dragDraw
+    fun savePlayer(dragDraw: DragDraw) {
+        players[currentID] = dragDraw
+        ++currentID
     }
 }

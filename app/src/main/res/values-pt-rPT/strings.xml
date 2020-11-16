@@ -15,4 +15,14 @@
     <string name="hint">Pista</string>
     <string name="guess">Adivinha</string>
     <string name="sub">Submeter</string>
+
+    <string name="car">Carro</string>
+    <string name="bus">Autocarro</string>
+    <string name="house">Casa</string>
+    <string name="boat">Barco</string>
+    <string name="tree">Árvore</string>
+    <string name="book">Livro</string>
+    <string name="camera">Câmera</string>
+    <string name="dog">Cão</string>
+    <string name="cat">Gato</string>
 </resources>

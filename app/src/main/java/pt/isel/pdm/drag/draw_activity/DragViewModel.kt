@@ -2,23 +2,44 @@ package pt.isel.pdm.drag.draw_activity
 
 import androidx.lifecycle.ViewModel
 import pt.isel.pdm.drag.draw_activity.model.DragDraw
+import pt.isel.pdm.drag.draw_activity.model.DragGame
 import pt.isel.pdm.drag.draw_activity.model.Position
 
-class DragViewModel : ViewModel() {
+class DragViewModel(playersnum: Int, rounds: Int) : ViewModel() {
 
     var dragDraw: DragDraw = DragDraw()
+    val dragGame = DragGame(playersnum,rounds)
+
+
+    /**
+     * 
+     */
+    fun showAllDraws() {
+
+    }
+
+    /**
+     * verifica se é para desenhar ou advinhar
+     */
+    fun verifyPlayerAndRound() {
+
+    }
+
 
     /**
      * metodo talvez necessario para os varios jogadores
      */
     fun initiatePlayerDragDraw() {
         dragDraw = DragDraw()
+
     }
 
     /**
      * adiciona o desenho do jogador atual à lista de desenhos do jogo
      */
-    fun addPlayerDraw() {}
+    fun addPlayerDraw() {
+        dragGame.savePlayer(dragDraw)
+    }
 
     /**
      * inicia uma linha desenhada pelo jogador

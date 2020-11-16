@@ -10,12 +10,12 @@
         android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="152dp"
         android:text="@string/start"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -45,7 +45,7 @@
             android:clickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/roundCount"
-            app:layout_constraintHorizontal_bias="0.266"
+            app:layout_constraintHorizontal_bias="0.211"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_exposure_neg_1_24" />
@@ -75,14 +75,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
         android:layout_width="409dp"
         android:layout_height="132dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/start"
-        app:layout_constraintVertical_bias="0.576">
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addPlayer"
@@ -131,6 +130,94 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.504" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="408dp"
+        android:layout_height="288dp"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <CheckBox
+            android:id="@+id/car_checkBox"
+            android:layout_width="136dp"
+            android:layout_height="96dp"
+            android:text="@string/car"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tree_checkBox" />
+
+        <CheckBox
+            android:id="@+id/cat_checkBox"
+            android:layout_width="136dp"
+            android:layout_height="96dp"
+            android:text="@string/cat"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/car_checkBox" />
+
+        <CheckBox
+            android:id="@+id/dog_checkBox"
+            android:layout_width="136dp"
+            android:layout_height="96dp"
+            android:text="@string/dog"
+            app:layout_constraintStart_toEndOf="@+id/tree_checkBox"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/boat_checkBox"
+            android:layout_width="136dp"
+            android:layout_height="96dp"
+            android:text="@string/boat"
+            app:layout_constraintStart_toEndOf="@+id/car_checkBox"
+            app:layout_constraintTop_toBottomOf="@+id/dog_checkBox" />
+
+        <CheckBox
+            android:id="@+id/book_checkBox"
+            android:layout_width="136dp"
+            android:layout_height="96dp"
+            android:text="@string/book"
+            app:layout_constraintStart_toEndOf="@+id/cat_checkBox"
+            app:layout_constraintTop_toBottomOf="@+id/boat_checkBox" />
+
+        <CheckBox
+            android:id="@+id/bus_checkBox"
+            android:layout_width="136dp"
+            android:layout_height="96dp"
+            android:text="@string/bus"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/dog_checkBox"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/house_checkBox"
+            android:layout_width="136dp"
+            android:layout_height="96dp"
+            android:layout_marginEnd="4dp"
+            android:text="@string/house"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/boat_checkBox"
+            app:layout_constraintTop_toBottomOf="@+id/bus_checkBox" />
+
+        <CheckBox
+            android:id="@+id/camera_checkBox"
+            android:layout_width="136dp"
+            android:layout_height="96dp"
+            android:layout_marginEnd="4dp"
+            android:text="@string/camera"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/book_checkBox"
+            app:layout_constraintTop_toBottomOf="@+id/house_checkBox" />
+
+        <CheckBox
+            android:id="@+id/tree_checkBox"
+            android:layout_width="136dp"
+            android:layout_height="96dp"
+            android:text="@string/tree"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

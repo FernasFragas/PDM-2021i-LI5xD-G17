@@ -16,4 +16,14 @@
     <string name="hint">Hint</string>
     <string name="guess">Guess</string>
     <string name="sub">Submit</string>
+
+    <string name="car">Car</string>
+    <string name="bus">Bus</string>
+    <string name="house">House</string>
+    <string name="boat">Boat</string>
+    <string name="tree">Tree</string>
+    <string name="book">Book</string>
+    <string name="camera">Camera</string>
+    <string name="dog">Dog</string>
+    <string name="cat">Cat</string>
 </resources>
