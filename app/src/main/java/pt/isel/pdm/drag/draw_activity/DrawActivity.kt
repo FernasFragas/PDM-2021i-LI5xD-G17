@@ -5,8 +5,6 @@ import android.view.MotionEvent.*
 import androidx.appcompat.app.AppCompatActivity
 import pt.isel.pdm.drag.Keys
 import pt.isel.pdm.drag.databinding.ActivityDrawBinding
-import pt.isel.pdm.drag.model.Draws
-import pt.isel.pdm.drag.model.Lines
 import pt.isel.pdm.drag.model.Position
 
 /**
@@ -14,34 +12,45 @@ import pt.isel.pdm.drag.model.Position
  */
 class DrawActivity : AppCompatActivity() {
 
+    private val binding: ActivityDrawBinding by lazy {ActivityDrawBinding.inflate(layoutInflater)}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityDrawBinding.inflate(layoutInflater)
-
 
         val playerCount = intent.getIntExtra(Keys.PLAYER_COUNT_KEY.name, 0)
         val roundCount = intent.getIntExtra(Keys.ROUND_COUNT_KEY.name, 0)
 
 
-
+        var dragViewModel = DragViewModel()
 
 
         setContentView(binding.root)
-        var start = Position()
-        var drawsM = Draws()
-        binding.dragDrawView.draws = drawsM
+        drawOnGoing(dragViewModel)
+    }
+
+    /**
+     *
+     */
+    private fun drawOnGoing(dragViewModel: DragViewModel) {
+        dragViewModel.initiatePlayerDragDraw()
+        binding.dragDrawView.viewModel = dragViewModel
         binding.dragDrawView.setOnTouchListener { v, event ->
             when(event.action) {
-                ACTION_DOWN -> start = Position(event.x,event.y)
+                ACTION_DOWN -> dragViewModel.initiatePlayerLine(Position(event.x,event.y))
                 ACTION_MOVE -> {
-                    drawsM.addDraws(Lines(start, Position(event.x, event.y)))
-                    start = Position(event.x, event.y)
+                    dragViewModel.addPlayerLine(Position(event.x,event.y))
+                    dragViewModel.initiatePlayerLine(Position(event.x,event.y))
                 }
-                ACTION_UP -> {
-                    drawsM.addDraws(Lines(start, Position(event.x, event.y)))
-                }
+                ACTION_UP -> dragViewModel.addPlayerLine(Position(event.x,event.y))
             }
             true
         }
+    }
+
+    /**
+     *
+     */
+    private fun submitPlayerDraw() {
+
     }
 }
