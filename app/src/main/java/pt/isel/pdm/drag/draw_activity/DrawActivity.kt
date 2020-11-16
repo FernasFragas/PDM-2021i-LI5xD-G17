@@ -5,7 +5,7 @@ import android.view.MotionEvent.*
 import androidx.appcompat.app.AppCompatActivity
 import pt.isel.pdm.drag.Keys
 import pt.isel.pdm.drag.databinding.ActivityDrawBinding
-import pt.isel.pdm.drag.model.Position
+import pt.isel.pdm.drag.draw_activity.model.Position
 
 /**
  * Activity referent for drawing

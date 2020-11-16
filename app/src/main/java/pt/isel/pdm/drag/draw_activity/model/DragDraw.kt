@@ -1,4 +1,4 @@
-package pt.isel.pdm.drag.model
+package pt.isel.pdm.drag.draw_activity.model
 
 data class Position(val x: Float, val y: Float) {
     constructor(): this(0f,0f)

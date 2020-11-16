@@ -7,7 +7,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import pt.isel.pdm.drag.draw_activity.DragViewModel
-import pt.isel.pdm.drag.model.DragDraw
+import pt.isel.pdm.drag.draw_activity.model.DragDraw
 
 /**
  *
