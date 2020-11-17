@@ -12,14 +12,6 @@ class DragViewModel(playersnum: Int, rounds: Int) : ViewModel() {
 
     var drawingState = true
 
-
-    /**
-     * 
-     */
-    fun showAllDraws() {
-
-    }
-
     /**
      * verifica se é para desenhar ou advinhar
      */

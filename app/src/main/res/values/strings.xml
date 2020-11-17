@@ -12,6 +12,7 @@
     <string name="round_count">Round Count:</string>
     <string name="player_count">Player Count:</string>
     <string name="start">start</string>
+    <string name="options">Choose Your Options</string>
 
     <string name="hint">Hint</string>
     <string name="guess">Guess</string>
