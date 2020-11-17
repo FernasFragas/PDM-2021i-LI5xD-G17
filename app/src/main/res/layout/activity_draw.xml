@@ -16,12 +16,13 @@
 
         <pt.isel.pdm.drag.draw_activity.view.DragDrawView
             android:id="@+id/dragDrawView"
-            android:layout_width="411dp"
-            android:layout_height="588dp"
+            android:layout_width="417dp"
+            android:layout_height="449dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.568" />
 
         <Button
             android:id="@+id/submit_button"
@@ -33,7 +34,7 @@
             app:layout_constraintHorizontal_bias="0.95"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/dragDrawView"
-            app:layout_constraintVertical_bias="0.97" />
+            app:layout_constraintVertical_bias="0.967" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -59,39 +60,39 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/InputView4"
+            android:id="@+id/userInput"
             android:layout_width="330dp"
             android:layout_height="78dp"
             android:fontFamily="sans-serif-black"
             android:hint="@string/guess"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/divider2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="visible">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:textColor="@color/purple_500"
-                android:textSize="24sp"/>
+                android:textSize="24sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/Pista4"
+            android:id="@+id/hint"
             android:layout_width="330dp"
             android:layout_height="78dp"
             android:fontFamily="sans-serif-black"
-            android:textColor="@color/purple_200"
-            android:text="@string/hint"
             android:gravity="center"
+            android:text="@string/hint"
+            android:textColor="@color/purple_200"
             android:textSize="36sp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/divider2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="invisible"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

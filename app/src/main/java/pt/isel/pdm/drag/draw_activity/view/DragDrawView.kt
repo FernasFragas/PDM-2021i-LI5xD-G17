@@ -37,8 +37,7 @@ class DragDrawView(ctx: Context, attrs: AttributeSet) : View(ctx, attrs) {
         invalidate()
     }
 
-
-/*
+    /*
     override fun onMeasure(wM: Int, hM: Int) {
         var w = MeasureSpec.getSize(wM)
         var h = MeasureSpec.getSize(hM)
@@ -50,7 +49,9 @@ class DragDrawView(ctx: Context, attrs: AttributeSet) : View(ctx, attrs) {
         }
         setMeasuredDimension(w,h)
     }
- */
+
+     */
+
 
     /**
      * data binding com viewModel

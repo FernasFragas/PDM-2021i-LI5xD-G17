@@ -10,6 +10,8 @@ class DragViewModel(playersnum: Int, rounds: Int) : ViewModel() {
     var dragDraw: DragDraw = DragDraw()
     val dragGame = DragGame(playersnum,rounds)
 
+    var drawingState = true
+
 
     /**
      * 
@@ -21,8 +23,8 @@ class DragViewModel(playersnum: Int, rounds: Int) : ViewModel() {
     /**
      * verifica se é para desenhar ou advinhar
      */
-    fun verifyPlayerAndRound() {
-
+    fun changeState() {
+        drawingState = !drawingState
     }
 
 

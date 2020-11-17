@@ -63,7 +63,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/InputView4"
+            android:id="@+id/userInput"
             android:layout_width="330dp"
             android:layout_height="match_parent"
             android:fontFamily="sans-serif-black"
