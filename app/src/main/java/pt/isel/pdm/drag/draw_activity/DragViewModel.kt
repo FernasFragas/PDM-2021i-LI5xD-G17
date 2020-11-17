@@ -1,5 +1,6 @@
 package pt.isel.pdm.drag.draw_activity
 
+import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
 import pt.isel.pdm.drag.draw_activity.model.DragDraw
 import pt.isel.pdm.drag.draw_activity.model.DragGame
@@ -11,6 +12,7 @@ class DragViewModel(playersnum: Int, rounds: Int) : ViewModel() {
     val dragGame = DragGame(playersnum,rounds)
 
     var drawingState = true
+
 
     /**
      * verifica se é para desenhar ou advinhar

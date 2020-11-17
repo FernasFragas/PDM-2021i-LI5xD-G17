@@ -2,19 +2,13 @@ package pt.isel.pdm.drag.draw_activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.MotionEvent.*
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import pt.isel.pdm.drag.Keys
 import pt.isel.pdm.drag.databinding.ActivityDrawBinding
 import pt.isel.pdm.drag.draw_activity.model.Position
-
-//TODO{
-//  1. Definir o que se faz no botão submit
-//  2. regra de quando é para mostrar a pista e desenhar ou quando é para mostrar o desenho e adivinhar
-//  3. ver todos da dragdrawview
-// }
-
 
 /**
  * Activity referent for drawing
@@ -24,6 +18,8 @@ class DrawActivity : AppCompatActivity() {
     private val binding: ActivityDrawBinding by lazy { ActivityDrawBinding.inflate(layoutInflater) }
 
     private var word = ""
+    var timer = 0
+    var c: CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,13 +31,27 @@ class DrawActivity : AppCompatActivity() {
         var dragViewModel = DragViewModel(playerCount,roundCount)
 
         setContentView(binding.root)
-
         prepareListeners(dragViewModel)
         reactToState(dragViewModel)
+        c = timer()
+    }
+
+
+    fun timer(): CountDownTimer {
+        timer=0
+       return object : CountDownTimer(61000,1000) {
+            override fun onTick(p0: Long) {
+                binding.counter?.setText(timer.toString())
+                ++timer
+            }
+
+            override fun onFinish() {
+            }
+        }.start()
     }
 
     /**
-     *
+     *  adequa a activity á opção de quando é para desenhar
      */
     private fun drawOnGoing(dragViewModel: DragViewModel) {
         dragViewModel.initiatePlayerDragDraw()
@@ -52,12 +62,19 @@ class DrawActivity : AppCompatActivity() {
         setDrawListener(dragViewModel = dragViewModel)
     }
 
+    /**
+     * adequa a activity á opção de quando é para adivinhar
+     */
     private fun guessState(dragViewModel: DragViewModel) {
         binding.userInput.visibility = View.VISIBLE
         binding.hint?.visibility = View.INVISIBLE
         setDrawListener(dragViewModel = dragViewModel)
     }
 
+
+    /**
+     * define qual o se é para desenhar ou para advinhar no estado seguinte
+     */
     private fun reactToState(dragViewModel: DragViewModel){
         if (dragViewModel.drawingState)
             drawOnGoing(dragViewModel)
@@ -65,6 +82,9 @@ class DrawActivity : AppCompatActivity() {
             guessState(dragViewModel)
     }
 
+    /**
+     * Listeners
+     */
     private fun prepareListeners(dragViewModel: DragViewModel) {
         setDrawListener(dragViewModel)
         setSubmitListener(dragViewModel)
@@ -89,6 +109,7 @@ class DrawActivity : AppCompatActivity() {
 
     private fun setSubmitListener(dragViewModel: DragViewModel) {
         binding.submitButton.setOnClickListener {
+            c?.onFinish()
             if (dragViewModel.drawingState) {
                 dragViewModel.addPlayerDraw()
                 binding.userInput.editText?.setText("")

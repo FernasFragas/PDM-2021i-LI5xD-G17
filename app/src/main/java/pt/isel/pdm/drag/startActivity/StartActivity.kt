@@ -16,12 +16,6 @@ import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityStartLayoutBinding
 import pt.isel.pdm.drag.draw_activity.DrawActivity
 
-//TODO{
-//  1. por botão start enabled a false enquanto não estiver escolhida uma palavra
-//  2. quando se escolhe uma palavra impedir que seja possivel escolher outra enquanto não se tira o check da atual
-//  3. passar a palavra escolhida para a proxima activity
-// }
-
 class StartActivity : AppCompatActivity() {
 
     private val binding: ActivityStartLayoutBinding by lazy { ActivityStartLayoutBinding.inflate(layoutInflater) }
