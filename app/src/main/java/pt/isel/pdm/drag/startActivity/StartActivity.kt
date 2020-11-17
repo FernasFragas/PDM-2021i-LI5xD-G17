@@ -4,8 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.RadioButton
 import androidx.activity.viewModels
+import androidx.core.view.get
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModel
+import kotlinx.android.synthetic.main.activity_start_layout.*
 import pt.isel.pdm.drag.Keys
 import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityStartLayoutBinding
@@ -27,11 +32,11 @@ class StartActivity : AppCompatActivity() {
 
         val viewModel by viewModels<StartModel>()
 
+        setContentView(binding.root)
+
         reactToPlayerCount(viewModel)
         reactToRoundCount(viewModel)
         setListeners(viewModel)
-
-        setContentView(binding.root)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -57,13 +62,14 @@ class StartActivity : AppCompatActivity() {
         }
 
         binding.start.setOnClickListener {
+            model.word = word.text.toString()
             val intent = Intent(this, DrawActivity::class.java).apply {
                 putExtra(Keys.PLAYER_COUNT_KEY.name, model.playerCount)
                 putExtra(Keys.ROUND_COUNT_KEY.name, model.roundCount)
+                putExtra(Keys.GAME_WORD_KEY.name, model.word)
             }
             startActivity(intent)
         }
-
     }
 
 

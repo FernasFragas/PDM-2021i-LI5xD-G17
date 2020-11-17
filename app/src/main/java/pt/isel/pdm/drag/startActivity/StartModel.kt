@@ -11,6 +11,8 @@ private const val DEFAULT_ROUND_COUNT = 6
 
 class StartModel(var playerCount : Int = DEFAULT_PLAYER_COUNT, var roundCount : Int = DEFAULT_ROUND_COUNT) : ViewModel() {
 
+    var word = ""
+
     fun addPlayer(){
         playerCount++
     }

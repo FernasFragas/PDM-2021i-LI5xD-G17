@@ -23,13 +23,14 @@ class DrawActivity : AppCompatActivity() {
 
     private val binding: ActivityDrawBinding by lazy { ActivityDrawBinding.inflate(layoutInflater) }
 
-    private var word = "carro"
+    private var word = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val playerCount = intent.getIntExtra(Keys.PLAYER_COUNT_KEY.name, 0)
         val roundCount = intent.getIntExtra(Keys.ROUND_COUNT_KEY.name, 0)
+        word = intent.getStringExtra(Keys.GAME_WORD_KEY.name).toString()
 
         var dragViewModel = DragViewModel(playerCount,roundCount)
 

@@ -132,126 +132,43 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="136dp"
-        android:layout_height="288dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <RadioGroup
-            android:layout_width="136dp"
-            android:layout_height="288dp"
-            tools:layout_editor_absoluteY="95dp">
-
-            <RadioButton
-                android:id="@+id/car_radioButton"
-                android:layout_width="136dp"
-                android:layout_height="96dp"
-                android:text="@string/car"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tree_radioButton" />
-
-            <RadioButton
-                android:id="@+id/cat_radioButton"
-                android:layout_width="136dp"
-                android:layout_height="96dp"
-                android:text="@string/cat"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/car_radioButton" />
-
-            <RadioButton
-                android:id="@+id/dog_radioButton"
-                android:layout_width="136dp"
-                android:layout_height="96dp"
-                android:text="@string/dog"
-                app:layout_constraintStart_toEndOf="@+id/tree_radioButton"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <RadioButton
-                android:id="@+id/boat_radioButton"
-                android:layout_width="136dp"
-                android:layout_height="96dp"
-                android:text="@string/boat"
-                app:layout_constraintStart_toEndOf="@+id/car_radioButton"
-                app:layout_constraintTop_toBottomOf="@+id/dog_radioButton" />
-
-            <RadioButton
-                android:id="@+id/book_radioButton"
-                android:layout_width="136dp"
-                android:layout_height="96dp"
-                android:text="@string/book"
-                app:layout_constraintStart_toEndOf="@+id/cat_radioButton"
-                app:layout_constraintTop_toBottomOf="@+id/boat_radioButton" />
-
-            <RadioButton
-                android:id="@+id/bus_radioButton"
-                android:layout_width="136dp"
-                android:layout_height="96dp"
-                android:text="@string/bus"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/dog_radioButton"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <RadioButton
-                android:id="@+id/house_radioButton"
-                android:layout_width="136dp"
-                android:layout_height="96dp"
-                android:layout_marginEnd="4dp"
-                android:text="@string/house"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/boat_radioButton"
-                app:layout_constraintTop_toBottomOf="@+id/bus_radioButton" />
-
-            <RadioButton
-                android:id="@+id/camera_radioButton"
-                android:layout_width="136dp"
-                android:layout_height="96dp"
-                android:layout_marginEnd="4dp"
-                android:text="@string/camera"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/book_radioButton"
-                app:layout_constraintTop_toBottomOf="@+id/house_radioButton" />
-
-            <RadioButton
-                android:id="@+id/tree_radioButton"
-                android:layout_width="136dp"
-                android:layout_height="96dp"
-                android:text="@string/tree"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </RadioGroup>
-    </ScrollView>
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="195dp"
         android:layout_height="151dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="32dp"
-        app:tint="@color/purple_200"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/scrollView2"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        android:layout_marginBottom="52dp"
+        app:layout_constraintBottom_toTopOf="@+id/word"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_edit"
+        app:tint="@color/purple_200" />
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="194dp"
-        android:layout_height="122dp"
-        android:layout_marginStart="183dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="195dp"
+        android:layout_height="151dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="52dp"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
+        android:text="@string/options"
         android:textColor="@color/purple_200"
         android:textSize="34sp"
-        android:text="@string/options"
+        app:layout_constraintBottom_toTopOf="@+id/word"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/word"
+        android:layout_width="287dp"
+        android:layout_height="70dp"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="textPersonName"
+        android:text="@string/hint"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
-        app:layout_constraintStart_toStartOf="@+id/scrollView2" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
