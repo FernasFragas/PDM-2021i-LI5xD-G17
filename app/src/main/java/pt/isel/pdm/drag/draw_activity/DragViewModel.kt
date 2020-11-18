@@ -3,7 +3,6 @@ package pt.isel.pdm.drag.draw_activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import pt.isel.pdm.drag.databinding.ActivityDrawBinding
 import pt.isel.pdm.drag.draw_activity.model.DragDraw
 import pt.isel.pdm.drag.draw_activity.model.DragGame
 import pt.isel.pdm.drag.draw_activity.model.Position
@@ -11,6 +10,7 @@ import pt.isel.pdm.drag.draw_activity.model.State
 import pt.isel.pdm.drag.utils.runDelayed
 
 private const val SAVED_STATE_KEY = "DragViewModel.SavedState"
+var timer = 0
 
 class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
 
@@ -28,9 +28,11 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
     private fun setTimer() {
         val roundBeforeTimer = game.value?.roundCount
         val stateBeforeTimer = game.value?.state
-        runDelayed(6000) {
-            if (game.value?.roundCount == roundBeforeTimer && game.value?.state == stateBeforeTimer)
+        runDelayed(60000) {
+            if (game.value?.roundCount == roundBeforeTimer && game.value?.state == stateBeforeTimer) {
+                timer = 0
                 changeState()
+            }
         }
     }
 

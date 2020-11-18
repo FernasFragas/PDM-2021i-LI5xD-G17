@@ -11,7 +11,7 @@ import pt.isel.pdm.drag.Keys
 import pt.isel.pdm.drag.databinding.ActivityDrawBinding
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
-import pt.isel.pdm.drag.utils.runDelayed
+import android.os.Handler
 
 /**
  * Activity referent for drawing
@@ -21,8 +21,7 @@ class DrawActivity : AppCompatActivity() {
     private val binding: ActivityDrawBinding by lazy { ActivityDrawBinding.inflate(layoutInflater) }
     private val viewModel: DragViewModel by viewModels()
 
-    var timer = 0
-    var c: CountDownTimer? = null
+    var handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,21 +42,18 @@ class DrawActivity : AppCompatActivity() {
                 State.GUESSING -> guessState()
             }
         }
-        //c = timer()
+        timer=0
+        handler.post(timer())
     }
 
-
-    fun timer(): CountDownTimer {
-        timer=0
-       return object : CountDownTimer(61000,1000) {
-            override fun onTick(p0: Long) {
+    fun timer(): Runnable {
+        var time = Runnable {}
+            time = Runnable {
                 binding.counter?.setText(timer.toString())
                 ++timer
+                handler.postDelayed(time, 1000)
             }
-
-            override fun onFinish() {
-            }
-        }.start()
+        return time
     }
 
     /**
@@ -107,16 +103,19 @@ class DrawActivity : AppCompatActivity() {
 
     private fun setSubmitListener() {
         binding.submitButton.setOnClickListener {
-            c?.onFinish()
+            timer = 0
             changeState()
         }
     }
 
     private fun changeState() {
-        if (viewModel.game.value?.state == State.DRAWING)
+        if (viewModel.game.value?.state == State.DRAWING) {
             binding.userInput.editText?.setText("")
-        else
+        }
+        else {
             viewModel.newWord(binding.userInput.editText?.text.toString())
+        }
         viewModel.changeState()
+
     }
 }
