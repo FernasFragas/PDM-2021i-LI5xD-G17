@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.MotionEvent.*
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import pt.isel.pdm.drag.Keys
 import pt.isel.pdm.drag.databinding.ActivityDrawBinding
 import pt.isel.pdm.drag.draw_activity.model.Position
+import pt.isel.pdm.drag.draw_activity.model.State
+import pt.isel.pdm.drag.utils.runDelayed
 
 /**
  * Activity referent for drawing
@@ -16,8 +19,8 @@ import pt.isel.pdm.drag.draw_activity.model.Position
 class DrawActivity : AppCompatActivity() {
 
     private val binding: ActivityDrawBinding by lazy { ActivityDrawBinding.inflate(layoutInflater) }
+    private val viewModel: DragViewModel by viewModels()
 
-    private var word = ""
     var timer = 0
     var c: CountDownTimer? = null
 
@@ -26,14 +29,21 @@ class DrawActivity : AppCompatActivity() {
 
         val playerCount = intent.getIntExtra(Keys.PLAYER_COUNT_KEY.name, 0)
         val roundCount = intent.getIntExtra(Keys.ROUND_COUNT_KEY.name, 0)
-        word = intent.getStringExtra(Keys.GAME_WORD_KEY.name).toString()
 
-        var dragViewModel = DragViewModel(playerCount,roundCount)
+        viewModel.createNewGame(playerCount, roundCount)
+        viewModel.initialWord(intent.getStringExtra(Keys.GAME_WORD_KEY.name).toString())
 
         setContentView(binding.root)
-        prepareListeners(dragViewModel)
-        reactToState(dragViewModel)
-        c = timer()
+        prepareListeners()
+
+
+        viewModel.game.observe(this) {
+            when (viewModel.game.value?.state) {
+                State.DRAWING -> drawOnGoing()
+                State.GUESSING -> guessState()
+            }
+        }
+        //c = timer()
     }
 
 
@@ -53,73 +63,60 @@ class DrawActivity : AppCompatActivity() {
     /**
      *  adequa a activity á opção de quando é para desenhar
      */
-    private fun drawOnGoing(dragViewModel: DragViewModel) {
-        dragViewModel.initiatePlayerDragDraw()
-        binding.dragDrawView.viewModel = dragViewModel
+    private fun drawOnGoing() {
+        viewModel.initiatePlayerDragDraw()
+        binding.dragDrawView.viewModel = viewModel
         binding.userInput.visibility = View.INVISIBLE
-        binding.hint?.visibility = View.VISIBLE
-        binding.hint?.text = word
-        setDrawListener(dragViewModel = dragViewModel)
+        binding.hint.visibility = View.VISIBLE
+        binding.hint.text = viewModel.game.value?.currentWord
+        setDrawListener()
     }
 
     /**
      * adequa a activity á opção de quando é para adivinhar
      */
-    private fun guessState(dragViewModel: DragViewModel) {
+    private fun guessState() {
         binding.userInput.visibility = View.VISIBLE
-        binding.hint?.visibility = View.INVISIBLE
-        setDrawListener(dragViewModel = dragViewModel)
-    }
-
-
-    /**
-     * define qual o se é para desenhar ou para advinhar no estado seguinte
-     */
-    private fun reactToState(dragViewModel: DragViewModel){
-        if (dragViewModel.drawingState)
-            drawOnGoing(dragViewModel)
-        else
-            guessState(dragViewModel)
+        binding.hint.visibility = View.INVISIBLE
     }
 
     /**
      * Listeners
      */
-    private fun prepareListeners(dragViewModel: DragViewModel) {
-        setDrawListener(dragViewModel)
-        setSubmitListener(dragViewModel)
+    private fun prepareListeners() {
+        setDrawListener()
+        setSubmitListener()
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun setDrawListener(dragViewModel: DragViewModel) {
+    private fun setDrawListener() {
         binding.dragDrawView.setOnTouchListener { v, event ->
-            if (dragViewModel.drawingState) {
+            if (viewModel.game.value?.state == State.DRAWING) {
                 when (event.action) {
-                    ACTION_DOWN -> dragViewModel.initiatePlayerLine(Position(event.x, event.y))
+                    ACTION_DOWN -> viewModel.initiatePlayerLine(Position(event.x, event.y))
                     ACTION_MOVE -> {
-                        dragViewModel.addPlayerLine(Position(event.x, event.y))
-                        dragViewModel.initiatePlayerLine(Position(event.x, event.y))
+                        viewModel.addPlayerLine(Position(event.x, event.y))
+                        viewModel.initiatePlayerLine(Position(event.x, event.y))
                     }
-                    ACTION_UP -> dragViewModel.addPlayerLine(Position(event.x, event.y))
+                    ACTION_UP -> viewModel.addPlayerLine(Position(event.x, event.y))
                 }
             }
             true
         }
     }
 
-    private fun setSubmitListener(dragViewModel: DragViewModel) {
+    private fun setSubmitListener() {
         binding.submitButton.setOnClickListener {
             c?.onFinish()
-            if (dragViewModel.drawingState) {
-                dragViewModel.addPlayerDraw()
-                binding.userInput.editText?.setText("")
-            } else {
-                word = binding.userInput.editText?.text.toString()
-                //TODO ENVIAR O GUESS PARA O MODELO?
-            }
-            dragViewModel.changeState()
-
-            reactToState(dragViewModel)
+            changeState()
         }
+    }
+
+    private fun changeState() {
+        if (viewModel.game.value?.state == State.DRAWING)
+            binding.userInput.editText?.setText("")
+        else
+            viewModel.newWord(binding.userInput.editText?.text.toString())
+        viewModel.changeState()
     }
 }

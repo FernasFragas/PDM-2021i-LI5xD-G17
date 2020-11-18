@@ -1,15 +1,22 @@
 package pt.isel.pdm.drag.draw_activity.model
 
-data class Position(val x: Float, val y: Float) {
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class Position(val x: Float, val y: Float) : Parcelable {
     constructor(): this(0f,0f)
 }
 
-data class Lines (val start: Position, val end: Position)
+@Parcelize
+data class Lines (val start: Position, val end: Position) : Parcelable
+
 
 class DragDraw {
 
     val draws = mutableListOf<Lines>()
     var start = Position()
+
 
     fun initiateDraw (s: Position) {
         start = s

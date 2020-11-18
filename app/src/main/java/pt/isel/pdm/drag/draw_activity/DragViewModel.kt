@@ -1,24 +1,56 @@
 package pt.isel.pdm.drag.draw_activity
 
-import android.os.CountDownTimer
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import pt.isel.pdm.drag.databinding.ActivityDrawBinding
 import pt.isel.pdm.drag.draw_activity.model.DragDraw
 import pt.isel.pdm.drag.draw_activity.model.DragGame
 import pt.isel.pdm.drag.draw_activity.model.Position
+import pt.isel.pdm.drag.draw_activity.model.State
+import pt.isel.pdm.drag.utils.runDelayed
 
-class DragViewModel(playersnum: Int, rounds: Int) : ViewModel() {
+private const val SAVED_STATE_KEY = "DragViewModel.SavedState"
 
+class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
+
+    val game: MutableLiveData<DragGame> by lazy {
+        MutableLiveData<DragGame>(savedState.get<DragGame>(SAVED_STATE_KEY) ?: DragGame())
+    }
     var dragDraw: DragDraw = DragDraw()
-    val dragGame = DragGame(playersnum,rounds)
 
-    var drawingState = true
 
+    fun createNewGame(playersNum: Int, rounds: Int) {
+        game.value = DragGame(playersNum, rounds)
+        setTimer()
+    }
+
+    private fun setTimer() {
+        val roundBeforeTimer = game.value?.roundCount
+        val stateBeforeTimer = game.value?.state
+        runDelayed(6000) {
+            if (game.value?.roundCount == roundBeforeTimer && game.value?.state == stateBeforeTimer)
+                changeState()
+        }
+    }
 
     /**
      * verifica se é para desenhar ou advinhar
      */
     fun changeState() {
-        drawingState = !drawingState
+        if (game.value?.state == State.DRAWING) {
+            addPlayerDraw()
+            game.value?.state = State.GUESSING
+        } else {
+            addRound()
+            if (game.value?.currentWord == "") {
+                newWord("NO GUESS FOUND")
+            }
+            game.value?.state = State.DRAWING
+        }
+        game.value = game.value
+        setTimer()
+        savedState[SAVED_STATE_KEY] = game.value
     }
 
 
@@ -34,7 +66,7 @@ class DragViewModel(playersnum: Int, rounds: Int) : ViewModel() {
      * adiciona o desenho do jogador atual à lista de desenhos do jogo
      */
     fun addPlayerDraw() {
-        dragGame.savePlayer(dragDraw)
+        game.value?.savePlayer(dragDraw)
     }
 
     /**
@@ -49,6 +81,20 @@ class DragViewModel(playersnum: Int, rounds: Int) : ViewModel() {
      */
     fun addPlayerLine(end: Position) {
         dragDraw.addLines(end)
+        game.value?.save(dragDraw)
+    }
+
+    fun addRound() {
+        game.value?.addRound()
+    }
+
+    fun initialWord(word:String) {
+        if (game.value?.currentWord == "")
+            newWord(word)
+    }
+
+    fun newWord(word: String) {
+        game.value?.currentWord = word
     }
 
 }

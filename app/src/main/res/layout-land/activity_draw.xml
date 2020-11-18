@@ -84,7 +84,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/Pista4"
+            android:id="@+id/hint"
             android:layout_width="320dp"
             android:layout_height="25dp"
             android:fontFamily="sans-serif-black"
