@@ -31,16 +31,33 @@ class DragDraw {
         return draws
     }
 
-    fun invertDraw() {
+    fun invertDraw(isHorizontal: Boolean): Boolean = adjustCoordinates(isHorizontal)
+
+    /**
+     * ajusta a coordenadas dos pontos e
+     */
+    fun adjustCoordinates(isHorizontal: Boolean): Boolean {
         val newDraws = mutableListOf<Lines>()
+        if (!isHorizontal) {
+            draws.forEach {
+                val start = it.start
+                val startPosition = Position(start.x + 188, start.y - 272)
+                val end = it.end
+                val endPosition = Position(end.x + 188, end.y - 272)
+                newDraws.add(Lines(endPosition, startPosition))
+            }
+            draws = newDraws
+            return true
+        }
         draws.forEach {
             val start = it.start
-            val startPosition = Position(start.y,start.x)
+            val startPosition = Position(start.x - 188, start.y + 272)
             val end = it.end
-            val endPosition = Position(end.y,end.x)
-            newDraws.add(Lines(endPosition,startPosition))
-        }
+            val endPosition = Position(end.x - 188, end.y + 272)
+            newDraws.add(Lines(endPosition, startPosition))
+            }
         draws = newDraws
+        return false
     }
 }
 
