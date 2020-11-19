@@ -38,27 +38,25 @@ class DragDraw {
      */
     fun adjustCoordinates(isHorizontal: Boolean): Boolean {
         val newDraws = mutableListOf<Lines>()
-        if (!isHorizontal) {
             draws.forEach {
                 val start = it.start
-                val startPosition = Position(start.x + 188, start.y - 272)
+                val startPosition = Position(start.x, start.y)
                 val end = it.end
-                val endPosition = Position(end.x + 188, end.y - 272)
+                val endPosition = Position(end.x, end.y)
                 newDraws.add(Lines(endPosition, startPosition))
             }
             draws = newDraws
             return true
-        }
-        draws.forEach {
-            val start = it.start
-            val startPosition = Position(start.x - 188, start.y + 272)
-            val end = it.end
-            val endPosition = Position(end.x - 188, end.y + 272)
-            newDraws.add(Lines(endPosition, startPosition))
-            }
-        draws = newDraws
-        return false
     }
+/*
+    fun calcPos(pos: Position): Position {
+        val ratio = 8*8
+        var diagonal = sqrt(pos.x.toDouble().pow(2.0) + pos.y.toDouble().pow(2.0))
+        var height = diagonal / sqrt(ratio+1.0)
+        var with = ratio * diagonal / sqrt(ratio+1.0)
+        return Position(with.toFloat(), height.toFloat())
+    }
+*/
 }
 
 

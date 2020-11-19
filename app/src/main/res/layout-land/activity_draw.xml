@@ -6,25 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".draw_activity.DrawActivity">
 
+    <pt.isel.pdm.drag.draw_activity.view.DragDrawView
+        android:id="@+id/dragDrawView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="8:8"
+        app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout1"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout1"
-        android:layout_width="593dp"
-        android:layout_height="330dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/constraintLayout2"
+        android:layout_width="145dp"
+        android:layout_height="407dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <pt.isel.pdm.drag.draw_activity.view.DragDrawView
-            android:id="@+id/dragDrawView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/submit_button"
@@ -33,52 +32,42 @@
             android:text="@string/sub"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.024"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/dragDrawView"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <View
+            android:id="@+id/divider"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_purple"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
-        android:layout_width="731dp"
-        android:layout_height="77dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout1"
+        android:layout_width="150dp"
+        android:layout_height="418dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.444"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@android:color/holo_purple"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/userInput"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_width="115dp"
+            android:layout_height="411dp"
             android:fontFamily="sans-serif-black"
             android:hint="@string/guess"
             android:orientation="horizontal"
             android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@+id/divider2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/divider1"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:textColor="@color/purple_500"
                 android:textSize="24sp" />
@@ -86,8 +75,8 @@
 
         <TextView
             android:id="@+id/hint"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_width="115dp"
+            android:layout_height="411dp"
             android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:orientation="horizontal"
@@ -95,9 +84,21 @@
             android:textColor="@color/purple_200"
             android:textSize="36sp"
             android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/divider1"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_purple"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
