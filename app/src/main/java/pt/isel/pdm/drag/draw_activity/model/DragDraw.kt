@@ -14,7 +14,7 @@ data class Lines (val start: Position, val end: Position) : Parcelable
 
 class DragDraw {
 
-    val draws = mutableListOf<Lines>()
+    var draws = mutableListOf<Lines>()
     var start = Position()
 
 
@@ -29,6 +29,18 @@ class DragDraw {
 
     fun getLines() : List<Lines> {
         return draws
+    }
+
+    fun invertDraw() {
+        val newDraws = mutableListOf<Lines>()
+        draws.forEach {
+            val start = it.start
+            val startPosition = Position(start.y,start.x)
+            val end = it.end
+            val endPosition = Position(end.y,end.x)
+            newDraws.add(Lines(endPosition,startPosition))
+        }
+        draws = newDraws
     }
 }
 

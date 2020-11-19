@@ -2,7 +2,6 @@ package pt.isel.pdm.drag.draw_activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.MotionEvent.*
 import android.view.View
 import androidx.activity.viewModels
@@ -29,7 +28,9 @@ class DrawActivity : AppCompatActivity() {
         val playerCount = intent.getIntExtra(Keys.PLAYER_COUNT_KEY.name, 0)
         val roundCount = intent.getIntExtra(Keys.ROUND_COUNT_KEY.name, 0)
 
-        viewModel.createNewGame(playerCount, roundCount)
+
+
+        viewModel.startGame(playerCount, roundCount)
         viewModel.initialWord(intent.getStringExtra(Keys.GAME_WORD_KEY.name).toString())
 
         setContentView(binding.root)

@@ -17,18 +17,20 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
     val game: MutableLiveData<DragGame> by lazy {
         MutableLiveData<DragGame>(savedState.get<DragGame>(SAVED_STATE_KEY) ?: DragGame())
     }
-    var dragDraw: DragDraw = DragDraw()
 
-
-    fun createNewGame(playersNum: Int, rounds: Int) {
-        game.value = DragGame(playersNum, rounds)
-        setTimer()
+    fun startGame(playersNum: Int, rounds: Int) {
+        if (game.value?.playersNum == 0) {
+            game.value?.playersNum = playersNum
+            game.value?.rounds = rounds
+            game.value?.createDrawingContainer()
+            setTimer()
+        }
     }
 
     private fun setTimer() {
         val roundBeforeTimer = game.value?.roundCount
         val stateBeforeTimer = game.value?.state
-        runDelayed(60000) {
+        runDelayed(9999999999) {
             if (game.value?.roundCount == roundBeforeTimer && game.value?.state == stateBeforeTimer) {
                 timer = 0
                 changeState()
@@ -41,10 +43,10 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
      */
     fun changeState() {
         if (game.value?.state == State.DRAWING) {
-            addPlayerDraw()
             game.value?.state = State.GUESSING
         } else {
             addRound()
+            addPlayerDraw()
             if (game.value?.currentWord == "") {
                 newWord("NO GUESS FOUND")
             }
@@ -60,30 +62,29 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
      * metodo talvez necessario para os varios jogadores
      */
     fun initiatePlayerDragDraw() {
-        dragDraw = DragDraw()
-
+        game.value?.startNewDraw()
     }
 
     /**
      * adiciona o desenho do jogador atual à lista de desenhos do jogo
      */
     fun addPlayerDraw() {
-        game.value?.savePlayer(dragDraw)
+        game.value?.savePlayer()
     }
 
     /**
      * inicia uma linha desenhada pelo jogador
      */
     fun initiatePlayerLine(start: Position) {
-        dragDraw.initiateDraw(start)
+        game.value?.getCurrentDraw()?.initiateDraw(start)
     }
 
     /**
      * adiciona uma linha ao desenho do jogador atual
      */
     fun addPlayerLine(end: Position) {
-        dragDraw.addLines(end)
-        game.value?.save(dragDraw)
+        game.value?.getCurrentDraw()?.addLines(end)
+        //game.value?.save(dragDraw)
     }
 
     fun addRound() {

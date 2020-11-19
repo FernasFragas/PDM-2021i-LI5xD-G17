@@ -37,20 +37,16 @@ class DragDrawView(ctx: Context, attrs: AttributeSet) : View(ctx, attrs) {
         invalidate()
     }
 
-    /*
-    override fun onMeasure(wM: Int, hM: Int) {
-        var w = MeasureSpec.getSize(wM)
-        var h = MeasureSpec.getSize(hM)
-        if (MeasureSpec.getMode(hM)==MeasureSpec.UNSPECIFIED) {
-            h = height
-        }
-        if (MeasureSpec.getMode(wM)==MeasureSpec.UNSPECIFIED) {
-            w = width
-        }
-        setMeasuredDimension(w,h)
-    }
 
-     */
+    override fun onMeasure(wM: Int, hM: Int) {
+        var width = MeasureSpec.getSize(wM)
+        var height = MeasureSpec.getSize(hM)
+        if (MeasureSpec.getMode(hM) == MeasureSpec.UNSPECIFIED)
+            width = suggestedMinimumHeight
+        if (MeasureSpec.getMode(wM) == MeasureSpec.UNSPECIFIED)
+            height = suggestedMinimumWidth
+        setMeasuredDimension(width, height)
+    }
 
 
     /**
@@ -63,6 +59,7 @@ class DragDrawView(ctx: Context, attrs: AttributeSet) : View(ctx, attrs) {
         }
 
     private fun getDragDraws(): DragDraw? {
-        return viewModel?.dragDraw
+        return viewModel?.game?.value?.getCurrentDraw()
     }
+
 }
