@@ -1,6 +1,7 @@
 package pt.isel.pdm.drag.draw_activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent.*
 import android.view.View
@@ -11,6 +12,7 @@ import pt.isel.pdm.drag.databinding.ActivityDrawBinding
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
 import android.os.Handler
+import pt.isel.pdm.drag.showActivity.ShowActivity
 
 /**
  * Activity referent for drawing
@@ -89,13 +91,16 @@ class DrawActivity : AppCompatActivity() {
     private fun setDrawListener() {
         binding.dragDrawView.setOnTouchListener { v, event ->
             if (viewModel.game.value?.state == State.DRAWING) {
+                val winWidth = binding.dragDrawView.width
+                val winHeight = binding.dragDrawView.height
                 when (event.action) {
-                    ACTION_DOWN -> viewModel.initiatePlayerLine(Position(event.x, event.y))
+                    ACTION_DOWN ->
+                        viewModel.initiatePlayerLine(Position(event.x / winWidth, event.y / winHeight))
                     ACTION_MOVE -> {
-                        viewModel.addPlayerLine(Position(event.x, event.y))
-                        viewModel.initiatePlayerLine(Position(event.x, event.y))
+                        viewModel.addPlayerLine(Position(event.x / winWidth, event.y / winHeight))
+                        viewModel.initiatePlayerLine(Position(event.x / winWidth, event.y / winHeight))
                     }
-                    ACTION_UP -> viewModel.addPlayerLine(Position(event.x, event.y))
+                    ACTION_UP -> viewModel.addPlayerLine(Position(event.x / winWidth, event.y / winHeight))
                 }
             }
             true
@@ -110,13 +115,19 @@ class DrawActivity : AppCompatActivity() {
     }
 
     private fun changeState() {
-        if (viewModel.game.value?.state == State.DRAWING) {
+        var model = viewModel.game.value!!
+        if (model.state == State.DRAWING) {
             binding.userInput.editText?.setText("")
         }
         else {
             viewModel.newWord(binding.userInput.editText?.text.toString())
         }
         viewModel.changeState()
-
+        if (model.state == State.FINISHED) {
+            model.currentID = 0
+            val intent = Intent(this, ShowActivity::class.java)
+            intent.putExtra(Keys.GAME_KEY.name, model)
+            startActivity(intent)
+        }
     }
 }

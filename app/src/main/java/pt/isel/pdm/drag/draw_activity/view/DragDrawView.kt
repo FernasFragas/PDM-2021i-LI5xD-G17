@@ -31,8 +31,8 @@ class DragDrawView(ctx: Context, attrs: AttributeSet) : View(ctx, attrs) {
         var draws: DragDraw? = getDragDraws()
         draws?.getLines()?.iterator()?.forEach {
             canvas?.drawLine(
-                    it.start.x, it.start.y,
-                    it.end.x, it.end.y, brush)
+                    it.start.x * width, it.start.y * height,
+                    it.end.x * width, it.end.y * height, brush)
         }
         invalidate()
     }

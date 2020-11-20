@@ -1,8 +1,10 @@
 package pt.isel.pdm.drag.draw_activity
 
+import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import kotlinx.android.parcel.Parcelize
 import pt.isel.pdm.drag.draw_activity.model.DragDraw
 import pt.isel.pdm.drag.draw_activity.model.DragGame
 import pt.isel.pdm.drag.draw_activity.model.Position
@@ -23,6 +25,8 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
             game.value?.playersNum = playersNum
             game.value?.rounds = rounds
             game.value?.createDrawingContainer()
+            game.value = game.value
+            savedState[SAVED_STATE_KEY] = game.value
             setTimer()
         }
     }
@@ -50,11 +54,14 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
             if (game.value?.currentWord == "") {
                 newWord("NO GUESS FOUND")
             }
-            game.value?.state = State.DRAWING
+            if (game.value?.roundCount == game.value?.rounds)
+                game.value?.state = State.FINISHED
+            else
+                game.value?.state = State.DRAWING
         }
         game.value = game.value
-        setTimer()
         savedState[SAVED_STATE_KEY] = game.value
+        setTimer()
     }
 
 
