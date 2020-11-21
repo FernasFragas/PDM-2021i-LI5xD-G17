@@ -21,7 +21,7 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
     val game: MutableLiveData<DragGame> by lazy {
         MutableLiveData<DragGame>(savedState.get<DragGame>(SAVED_STATE_KEY) ?: DragGame())
     }
-
+/*
     val time: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>(0)
     }
@@ -46,7 +46,7 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
          */
 
     }
-
+*/
     /**
      * passa os valores que vêm da startActivity, para a nossa representação logica do jogo
      * quando estamos a iniciar um novo jogo
@@ -79,13 +79,19 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
     fun changeState() {
         if (game.value?.state == State.DRAWING) {
             game.value?.state = State.GUESSING
+            game.value?.round = State.CURRENT_ROUND
         } else {
             addPlayerDraw()
             if (game.value?.currentWord == "") {
                 newWord("NO GUESS FOUND")
             }
-            if (game.value?.currentID == 0)
+            if (game.value?.currentID == 0) {
                 addRound()
+                game.value?.round = State.NEW_ROUND
+            }
+            else {
+                game.value?.round = State.CURRENT_ROUND
+            }
             if (game.value?.currentRoundNumber == game.value?.roundsNum)
                 game.value?.state = State.FINISHED
             else
@@ -105,7 +111,7 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
     }
 
     /**
-     * adiciona o desenho do jogador atual à lista de desenhos do jogo
+     * incrementa o id do player
      */
     fun addPlayerDraw() {
         game.value?.savePlayer()
@@ -123,7 +129,6 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
      */
     fun addPlayerLine(end: Position) {
         game.value?.getCurrentDraw()?.addLines(end)
-        //game.value?.save(dragDraw)
     }
 
     /**

@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
  * com isso é realizado pelo sistema da android
  */
 @Parcelize
-enum class State : Parcelable { GUESSING, DRAWING, FINISHED }
+enum class State : Parcelable { GUESSING, DRAWING, FINISHED, NEW_ROUND, CURRENT_ROUND }
 
 @Parcelize
 data class DragGame(var playersNum: Int = 0,
@@ -22,6 +22,7 @@ data class DragGame(var playersNum: Int = 0,
     var currentWord = ""
     var currentRoundNumber = 0
     var state = State.DRAWING
+    var round = State.NEW_ROUND
     var timer = 0
 
     fun createDrawingContainer() {

@@ -17,6 +17,8 @@
     <string name="hint">Hint</string>
     <string name="guess">Guess</string>
     <string name="sub">Submit</string>
+    <string name="Over">Finished</string>
+    <string name="review">Game Review</string>
 
     <string name="car">Car</string>
     <string name="bus">Bus</string>

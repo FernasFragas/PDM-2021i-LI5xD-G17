@@ -8,10 +8,12 @@
 
     <TextView
         android:id="@+id/review"
-        android:layout_width="330dp"
-        android:layout_height="78dp"
+        android:layout_width="650dp"
+        android:layout_height="65dp"
+        android:layout_marginBottom="12dp"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
+        android:orientation="horizontal"
         android:text="@string/review"
         android:textColor="@color/purple_200"
         android:textSize="36sp"
@@ -23,8 +25,8 @@
 
     <pt.isel.pdm.drag.draw_activity.view.DragDrawView
         android:id="@+id/showDraw"
-        android:layout_width="413dp"
-        android:layout_height="605dp"
+        android:layout_width="731dp"
+        android:layout_height="334dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

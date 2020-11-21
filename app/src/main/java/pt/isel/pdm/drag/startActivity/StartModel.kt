@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 const val MAX_PLAYERS = 10
 const val MIN_PLAYERS = 5
 const val MAX_ROUNDS = 10
-const val MIN_ROUNDS = 5
+const val MIN_ROUNDS = 1
 private const val DEFAULT_PLAYER_COUNT = 6
 private const val DEFAULT_ROUND_COUNT = 6
 

@@ -13,6 +13,31 @@ import pt.isel.pdm.drag.draw_activity.model.Position
 
 private const val SWIPE_RANGE = 40
 
+enum class SwipeState { LEFT, RIGHT, NONE }
+
+class ShowModel {
+
+    lateinit var start : Position
+    lateinit var end : Position
+
+    fun addStartPos(x : Float, y : Float) {
+        start = Position(x, y)
+    }
+
+    fun addEndPos(x : Float, y : Float) {
+        end = Position(x, y)
+    }
+
+    fun getSwipeState() : SwipeState {
+        if (start.x >= end.x) {
+            if (start.x - end.x > SWIPE_RANGE)
+                return SwipeState.LEFT
+        } else if (end.x - start.x > SWIPE_RANGE)
+            return SwipeState.RIGHT
+        return SwipeState.NONE
+    }
+}
+
 class ShowActivity : AppCompatActivity() {
 
     //TODO: ANTES DE CHAMAR ESTA ACTIVITY POR O CURRENTID = 0
@@ -50,31 +75,6 @@ class ShowActivity : AppCompatActivity() {
                 }
             }
             true
-        }
-    }
-
-    enum class SwipeState { LEFT, RIGHT, NONE }
-
-    class ShowModel {
-
-        lateinit var start : Position
-        lateinit var end : Position
-
-        fun addStartPos(x : Float, y : Float) {
-            start = Position(x, y)
-        }
-
-        fun addEndPos(x : Float, y : Float) {
-            end = Position(x, y)
-        }
-
-        fun getSwipeState() : SwipeState{
-            if (start.x >= end.x) {
-                if (start.x - end.x > SWIPE_RANGE)
-                    return SwipeState.LEFT
-            } else if (end.x - start.x > SWIPE_RANGE)
-                    return SwipeState.RIGHT
-            return SwipeState.NONE
         }
     }
 

@@ -8,10 +8,12 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import pt.isel.pdm.drag.Keys
+import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityDrawBinding
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
 import pt.isel.pdm.drag.showActivity.ShowActivity
+import pt.isel.pdm.drag.utils.runDelayed
 
 /**
  * Activity referent for drawing
@@ -77,8 +79,17 @@ class DrawActivity : AppCompatActivity() {
      * Listeners
      */
     private fun prepareListeners() {
+        presentation()
         setDrawListener()
         setSubmitListener()
+    }
+
+    private fun presentation() {
+        binding.gameOver?.visibility = View.VISIBLE
+        binding.gameOver?.text = "Round " +  viewModel.game.value!!.currentRoundNumber
+        runDelayed(3000) {
+            binding.gameOver?.visibility = View.INVISIBLE
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -110,17 +121,30 @@ class DrawActivity : AppCompatActivity() {
     private fun changeState() {
         var model = viewModel.game.value!!
         if (model.state == State.DRAWING) {
-            binding.userInput.editText?.setText("")
+            binding.userInput.editText?.setText("") //CLEAN THE PREVIOUS INPUT
         }
         else {
-            viewModel.newWord(binding.userInput.editText?.text.toString())
+            viewModel.newWord(binding.userInput.editText?.text.toString())  //ADD the new word to the model
         }
+
         viewModel.changeState()
+
+        if(model.round == State.NEW_ROUND) {
+            binding.gameOver?.visibility = View.VISIBLE
+            binding.gameOver?.text = "Round " + model.currentRoundNumber
+        }
+        runDelayed(10000) {
+            binding.gameOver?.visibility = View.INVISIBLE
+        }
+
         if (model.state == State.FINISHED) {
+            binding.submitButton.isEnabled = false
+            binding.gameOver?.visibility = View.VISIBLE
+            binding.gameOver?.text = this.applicationContext.getText(R.string.Over)
             val intent = Intent(this, ShowActivity::class.java)
             intent.putExtra(Keys.GAME_KEY.name, model)
             startActivity(intent)
         }
-        viewModel.game.value?.timer = -1 //TODO TIRAR O NUMERO MAGICO
+        //viewModel.game.value?.timer = -1 //TODO TIRAR O NUMERO MAGICO
     }
 }
