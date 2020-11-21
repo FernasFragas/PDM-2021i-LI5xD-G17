@@ -40,8 +40,6 @@ class ShowModel {
 
 class ShowActivity : AppCompatActivity() {
 
-    //TODO: ANTES DE CHAMAR ESTA ACTIVITY POR O CURRENTID = 0
-
     private val binding: ActivityShowBinding by lazy { ActivityShowBinding.inflate(layoutInflater) }
     private val viewModel: DragViewModel by viewModels()
 
@@ -77,6 +75,7 @@ class ShowActivity : AppCompatActivity() {
             true
         }
     }
+
 
     private fun doSwipe(swipeState: SwipeState) {
 

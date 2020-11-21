@@ -44,6 +44,8 @@ class DrawActivity : AppCompatActivity() {
             when (viewModel.game.value?.state) {
                 State.DRAWING -> drawOnGoing()
                 State.GUESSING -> guessState()
+                State.NEW_ROUND -> newRoundState()
+                State.FINISHED -> finishState()
             }
         }
 
@@ -59,16 +61,10 @@ class DrawActivity : AppCompatActivity() {
      *  adequa a activity á opção de quando é para desenhar
      */
     private fun drawOnGoing() {
-        //viewModel.initiatePlayerDragDraw()
         binding.dragDrawView.viewModel = viewModel
         binding.userInput.visibility = View.INVISIBLE
         binding.hint.visibility = View.VISIBLE
         binding.hint.text = viewModel.getOriginalWord()
-        /*
-        binding.hint.text = viewModel.game.value?.currentWord
-        viewModel.addOriginal(viewModel.game.value!!.currentWord)   //TODO outra coisa
-
-         */
         binding.userInput.editText?.setText("")
         setDrawListener()
     }
@@ -79,6 +75,26 @@ class DrawActivity : AppCompatActivity() {
     private fun guessState() {
         binding.userInput.visibility = View.VISIBLE
         binding.hint.visibility = View.INVISIBLE
+    }
+
+    /**
+     * logica do estado newState
+     */
+    private fun newRoundState() {
+        var model = viewModel.game.value!!
+        if(model.round == State.NEW_ROUND) {
+            binding.gameOver?.visibility = View.VISIBLE
+            binding.gameOver?.text = "Round " + model.currentRoundNumber
+        }
+    }
+
+    private fun finishState() {
+        binding.submitButton.isEnabled = false
+        binding.gameOver?.visibility = View.VISIBLE
+        binding.gameOver?.text = this.applicationContext.getText(R.string.Over)
+        val intent = Intent(this, ShowActivity::class.java)
+        intent.putExtra(Keys.GAME_KEY.name, viewModel.game.value!!)
+        startActivity(intent)
     }
 
     /**
@@ -118,45 +134,25 @@ class DrawActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     *  muda o estado no model, envia o Guess para o modelo se o estado atual for Guessing
+     */
     private fun setSubmitListener() {
         binding.submitButton.setOnClickListener {
-            changeState()
+            if (viewModel.game.value!!.state == State.GUESSING)
+                viewModel.addGuess(binding.userInput.editText?.text.toString())
+            viewModel.changeState()
         }
     }
 
+    //metodo desnecessário
     private fun changeState() {
-        var model = viewModel.game.value!!
 
-        //TODO: ver se é preciso
-        if (model.state == State.GUESSING)
-            viewModel.addGuess(binding.userInput.editText?.text.toString())
-        /*
-        else {
-            binding.userInput.editText?.setText("")
-            viewModel.game.value?.currentWord = ""
-        }
-        */
-
-
-        viewModel.changeState()
-
-        if(model.round == State.NEW_ROUND) {
-            binding.gameOver?.visibility = View.VISIBLE
-            binding.gameOver?.text = "Round " + model.currentRoundNumber
-        }
+        //TODO: não sei a que metodo isto pertence dps mete no metodo certo (newRoundState() ou finishState())
         runDelayed(10000) {
-
             binding.gameOver?.visibility = View.INVISIBLE
         }
 
-        if (model.state == State.FINISHED) {
-            binding.submitButton.isEnabled = false
-            binding.gameOver?.visibility = View.VISIBLE
-            binding.gameOver?.text = this.applicationContext.getText(R.string.Over)
-            val intent = Intent(this, ShowActivity::class.java)
-            intent.putExtra(Keys.GAME_KEY.name, model)
-            startActivity(intent)
-        }
         //viewModel.game.value?.timer = -1 //TODO TIRAR O NUMERO MAGICO
     }
 }
