@@ -9,17 +9,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DRAG">
-        <activity android:name=".startActivity.StartActivity">
+        <activity
+            android:name=".startActivity.StartActivity"
+            android:noHistory="true" >
             <intent-filter>
+
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".showActivity.ShowActivity">
+        <activity
+            android:name=".draw_activity.DrawActivity"
+            android:theme="@style/Theme.DRAG.NoActionBar">
 
         </activity>
         <activity
-            android:name=".draw_activity.DrawActivity"
+            android:name=".showActivity.ShowActivity"
             android:theme="@style/Theme.DRAG.NoActionBar">
 
         </activity>

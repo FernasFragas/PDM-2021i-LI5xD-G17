@@ -12,32 +12,37 @@ import kotlinx.android.parcel.Parcelize
 enum class State : Parcelable { GUESSING, DRAWING, FINISHED }
 
 @Parcelize
-data class DragGame (var playersNum: Int = 0, var rounds: Int = 0) : Parcelable{
+data class DragGame(var playersNum: Int = 0,
+                    var roundsNum: Int = 0,
+                    var allDraws: MutableList<Array<DragDraw>> = mutableListOf(),
+                    var currentRound: Array<DragDraw> = Array(playersNum) { DragDraw() }
+) : Parcelable{
 
-    lateinit var players: Array<DragDraw>
     var currentID = 0
     var currentWord = ""
-    var roundCount = 0
+    var currentRoundNumber = 0
     var state = State.DRAWING
     var timer = 0
 
     fun createDrawingContainer() {
-        players = Array(playersNum) { DragDraw() }  //declaração de array
+        currentRound = Array(playersNum) { DragDraw() }  //declaração de array
     }
 
     fun startNewDraw() {
-        if (players[currentID].draws.size == 0)
-            players[currentID] = DragDraw()
+        if (currentRound[currentID].draws.size == 0)
+            currentRound[currentID] = DragDraw()
     }
 
-    fun getCurrentDraw() = players[currentID]
+    fun getCurrentDraw() = currentRound[currentID]
 
     fun savePlayer() {
-        ++currentID
+        currentID = (currentID + 1) % playersNum
     }
 
     fun addRound() {
-        roundCount++
+        allDraws.add(currentRound)
+        currentRoundNumber++
+        createDrawingContainer()
     }
 
 

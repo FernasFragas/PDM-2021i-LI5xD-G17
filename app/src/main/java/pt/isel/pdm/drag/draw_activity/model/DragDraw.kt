@@ -12,11 +12,7 @@ data class Position(val x: Float, val y: Float) : Parcelable {
 data class Lines (val start: Position, val end: Position) : Parcelable
 
 @Parcelize
-class DragDraw : Parcelable{
-
-    var draws = mutableListOf<Lines>()
-    var start = Position()
-
+class DragDraw(var draws: MutableList<Lines> = mutableListOf<Lines>(), var start : Position = Position()) : Parcelable{
 
     fun initiateDraw (s: Position) {
         start = s

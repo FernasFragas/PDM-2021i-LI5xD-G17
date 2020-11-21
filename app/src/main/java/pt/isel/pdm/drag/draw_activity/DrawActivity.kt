@@ -117,7 +117,6 @@ class DrawActivity : AppCompatActivity() {
         }
         viewModel.changeState()
         if (model.state == State.FINISHED) {
-            model.currentID = 0
             val intent = Intent(this, ShowActivity::class.java)
             intent.putExtra(Keys.GAME_KEY.name, model)
             startActivity(intent)

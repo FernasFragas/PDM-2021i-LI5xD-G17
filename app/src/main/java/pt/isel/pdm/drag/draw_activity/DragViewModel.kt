@@ -54,7 +54,7 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
     fun startGame(playersNum: Int, rounds: Int) {
         if (game.value?.playersNum == 0) {
             game.value?.playersNum = playersNum
-            game.value?.rounds = rounds
+            game.value?.roundsNum = rounds
             game.value?.createDrawingContainer()
             game.value = game.value
             savedState[SAVED_STATE_KEY] = game.value
@@ -63,10 +63,10 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
     }
 
     private fun setTimer() {
-        val roundBeforeTimer = game.value?.roundCount
+        val roundBeforeTimer = game.value?.currentRoundNumber
         val stateBeforeTimer = game.value?.state
-        runDelayed(6000000) {
-            if (game.value?.roundCount == roundBeforeTimer && game.value?.state == stateBeforeTimer) {
+        runDelayed(60000) {
+            if (game.value?.currentRoundNumber == roundBeforeTimer && game.value?.state == stateBeforeTimer) {
                 game.value?.timer = -1 //TODO TIRAR O NUMERO MAGICO
                 changeState()
             }
@@ -80,12 +80,13 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
         if (game.value?.state == State.DRAWING) {
             game.value?.state = State.GUESSING
         } else {
-            addRound()
             addPlayerDraw()
             if (game.value?.currentWord == "") {
                 newWord("NO GUESS FOUND")
             }
-            if (game.value?.roundCount == game.value?.rounds)
+            if (game.value?.currentID == 0)
+                addRound()
+            if (game.value?.currentRoundNumber == game.value?.roundsNum)
                 game.value?.state = State.FINISHED
             else
                 game.value?.state = State.DRAWING

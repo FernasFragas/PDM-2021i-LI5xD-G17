@@ -8,7 +8,6 @@ import androidx.activity.viewModels
 import pt.isel.pdm.drag.Keys
 import pt.isel.pdm.drag.databinding.ActivityShowBinding
 import pt.isel.pdm.drag.draw_activity.DragViewModel
-import pt.isel.pdm.drag.draw_activity.model.DragDraw
 import pt.isel.pdm.drag.draw_activity.model.DragGame
 import pt.isel.pdm.drag.draw_activity.model.Position
 
@@ -27,7 +26,10 @@ class ShowActivity : AppCompatActivity() {
         binding.showDraw.viewModel = viewModel
 
         val model = intent.getParcelableExtra<DragGame>(Keys.GAME_KEY.name)
-        viewModel.game.value?.players = model!!.players
+        viewModel.game.value?.allDraws = model!!.allDraws
+        viewModel.game.value?.currentRound = model.allDraws[model.currentRoundNumber]
+        viewModel.game.value?.playersNum = model.playersNum
+        viewModel.game.value?.roundsNum = model.roundsNum
 
 
         setListeners()
@@ -41,7 +43,6 @@ class ShowActivity : AppCompatActivity() {
         binding.showDraw.setOnTouchListener {v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> model.addStartPos(event.x, event.y)
-                MotionEvent.ACTION_MOVE,
                 MotionEvent.ACTION_UP -> {
                     model.addEndPos(event.x, event.y)
                     val state = model.getSwipeState()
@@ -68,12 +69,12 @@ class ShowActivity : AppCompatActivity() {
         }
 
         fun getSwipeState() : SwipeState{
-            val horizontalDifference = start.x - end.x
-            return when {
-                horizontalDifference > SWIPE_RANGE -> SwipeState.LEFT
-                horizontalDifference < SWIPE_RANGE -> SwipeState.RIGHT
-                else -> SwipeState.NONE
-            }
+            if (start.x >= end.x) {
+                if (start.x - end.x > SWIPE_RANGE)
+                    return SwipeState.LEFT
+            } else if (end.x - start.x > SWIPE_RANGE)
+                    return SwipeState.RIGHT
+            return SwipeState.NONE
         }
     }
 
@@ -82,13 +83,17 @@ class ShowActivity : AppCompatActivity() {
         val game = viewModel.game.value!!
 
         when(swipeState) {
-            SwipeState.LEFT -> {
+            SwipeState.RIGHT -> {
                 if (game.currentID != 0)
                     game.currentID = game.currentID - 1
             }
-            SwipeState.RIGHT -> {
-                if (game.currentID != game.rounds - 1)
+            SwipeState.LEFT -> {
+                if (game.currentID != game.playersNum - 1)
                     game.currentID = game.currentID + 1
+                else {
+                    game.currentRoundNumber = (game.currentRoundNumber + 1) % game.roundsNum
+                    viewModel.game.value?.currentRound = game.allDraws[game.currentRoundNumber]
+                }
             }
         }
     }
