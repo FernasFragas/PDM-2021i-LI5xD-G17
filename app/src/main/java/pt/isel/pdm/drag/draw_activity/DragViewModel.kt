@@ -66,7 +66,7 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
         val roundBeforeTimer = game.value?.currentRoundNumber
         val idBeforeTimer = game.value?.currentID
         val stateBeforeTimer = game.value?.state
-        runDelayed(6000L) {
+        runDelayed(60000L) {
             if (game.value?.currentID == idBeforeTimer
                     && game.value?.state == stateBeforeTimer
                     && game.value?.currentRoundNumber == roundBeforeTimer
@@ -94,7 +94,7 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
             if (game.value?.currentID == 0) {
                 addRound()
                 game.value?.round = State.NEW_ROUND
-            }
+            } else {game.value?.round = State.NOT_NEW_ROUND}
 
             game.value?.addOriginalWord(word)
 

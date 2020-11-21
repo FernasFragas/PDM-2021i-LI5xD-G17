@@ -44,9 +44,11 @@ class DrawActivity : AppCompatActivity() {
             when (viewModel.game.value?.state) {
                 State.DRAWING -> drawOnGoing()
                 State.GUESSING -> guessState()
-                State.NEW_ROUND -> newRoundState()
                 State.FINISHED -> finishState()
             }
+            if(viewModel.game.value?.round == State.NEW_ROUND)
+                newRoundState()
+
         }
 
         /*
@@ -82,9 +84,12 @@ class DrawActivity : AppCompatActivity() {
      */
     private fun newRoundState() {
         var model = viewModel.game.value!!
-        if(model.round == State.NEW_ROUND) {
+        if(model.round == State.NEW_ROUND && model.state != State.FINISHED) {
             binding.gameOver?.visibility = View.VISIBLE
             binding.gameOver?.text = "Round " + model.currentRoundNumber
+            runDelayed(3000) {
+                binding.gameOver?.visibility = View.INVISIBLE
+            }
         }
     }
 
@@ -92,9 +97,11 @@ class DrawActivity : AppCompatActivity() {
         binding.submitButton.isEnabled = false
         binding.gameOver?.visibility = View.VISIBLE
         binding.gameOver?.text = this.applicationContext.getText(R.string.Over)
-        val intent = Intent(this, ShowActivity::class.java)
-        intent.putExtra(Keys.GAME_KEY.name, viewModel.game.value!!)
-        startActivity(intent)
+        runDelayed(3000) {
+            val intent = Intent(this, ShowActivity::class.java)
+            intent.putExtra(Keys.GAME_KEY.name, viewModel.game.value!!)
+            startActivity(intent)
+        }
     }
 
     /**
@@ -143,16 +150,5 @@ class DrawActivity : AppCompatActivity() {
                 viewModel.addGuess(binding.userInput.editText?.text.toString())
             viewModel.changeState()
         }
-    }
-
-    //metodo desnecessário
-    private fun changeState() {
-
-        //TODO: não sei a que metodo isto pertence dps mete no metodo certo (newRoundState() ou finishState())
-        runDelayed(10000) {
-            binding.gameOver?.visibility = View.INVISIBLE
-        }
-
-        //viewModel.game.value?.timer = -1 //TODO TIRAR O NUMERO MAGICO
     }
 }
