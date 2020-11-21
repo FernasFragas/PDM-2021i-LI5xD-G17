@@ -18,7 +18,8 @@ import pt.isel.pdm.drag.draw_activity.DrawActivity
 
 class StartActivity : AppCompatActivity() {
 
-    private val binding: ActivityStartLayoutBinding by lazy { ActivityStartLayoutBinding.inflate(layoutInflater) }
+    private val binding: ActivityStartLayoutBinding
+            by lazy { ActivityStartLayoutBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

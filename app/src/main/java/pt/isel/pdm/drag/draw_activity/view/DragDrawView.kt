@@ -17,7 +17,6 @@ import pt.isel.pdm.drag.draw_activity.model.DragDraw
  */
 class DragDrawView(ctx: Context, attrs: AttributeSet) : View(ctx, attrs) {
 
-    //TODO() Limitar onde se pode desenhar
     //TODO ADICONAR OPÇÃO BORRACHA PARA SE PODER APAGAR
     //TODO ADICONAR ESCOLHA DE CORES
 

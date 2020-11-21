@@ -1,18 +1,20 @@
 package pt.isel.pdm.drag.draw_activity
 
-import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import kotlinx.android.parcel.Parcelize
-import pt.isel.pdm.drag.draw_activity.model.DragDraw
 import pt.isel.pdm.drag.draw_activity.model.DragGame
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
 import pt.isel.pdm.drag.utils.runDelayed
 
+/**
+ * no construtor desta classe vai ser passado uma instancia de um tipo que tem um estado da activity
+ * que foi preservado,(está relacionado com a lifecycle)
+ */
+
 private const val SAVED_STATE_KEY = "DragViewModel.SavedState"
-var timer = 0
+
 
 class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
 
@@ -20,6 +22,35 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
         MutableLiveData<DragGame>(savedState.get<DragGame>(SAVED_STATE_KEY) ?: DragGame())
     }
 
+    val time: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>(0)
+    }
+
+    fun changeTimer(millis: Long) {
+        /*
+        if(time.value == false) {
+            runDelayed(millis) {
+                game.value?.timer = game.value?.timer!! + 1
+                time.value = true
+            }
+        } else { time.value = false }
+        */
+        /*
+        runDelayed(millis) {
+            game.value?.timer = game.value?.timer!! + 1
+            time.value = time.value!! + 1
+            savedState[SAVED_STATE_KEY] = game.value
+            changeTimer(millis)
+        }
+
+         */
+
+    }
+
+    /**
+     * passa os valores que vêm da startActivity, para a nossa representação logica do jogo
+     * quando estamos a iniciar um novo jogo
+     */
     fun startGame(playersNum: Int, rounds: Int) {
         if (game.value?.playersNum == 0) {
             game.value?.playersNum = playersNum
@@ -34,9 +65,9 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
     private fun setTimer() {
         val roundBeforeTimer = game.value?.roundCount
         val stateBeforeTimer = game.value?.state
-        runDelayed(9999999999) {
+        runDelayed(6000000) {
             if (game.value?.roundCount == roundBeforeTimer && game.value?.state == stateBeforeTimer) {
-                timer = 0
+                game.value?.timer = -1 //TODO TIRAR O NUMERO MAGICO
                 changeState()
             }
         }
@@ -94,15 +125,24 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
         //game.value?.save(dragDraw)
     }
 
+    /**
+     * incrementa o valor da rounda na nossa representação logica do jogo
+     */
     fun addRound() {
         game.value?.addRound()
     }
 
+    /**
+     * caso a nossa representação logica não tenha palavra é atribuida a palavra recebida
+     */
     fun initialWord(word:String) {
         if (game.value?.currentWord == "")
             newWord(word)
     }
 
+    /**
+     * atualiza a palavra atual no modelo logico
+     */
     fun newWord(word: String) {
         game.value?.currentWord = word
     }

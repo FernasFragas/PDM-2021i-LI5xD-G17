@@ -23,10 +23,12 @@ class ShowActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+        binding.showDraw.viewModel = viewModel
+
         val model = intent.getParcelableExtra<DragGame>(Keys.GAME_KEY.name)
         viewModel.game.value?.players = model!!.players
-        binding.showDraw.viewModel = viewModel
-        setContentView(binding.root)
+
 
         setListeners()
     }

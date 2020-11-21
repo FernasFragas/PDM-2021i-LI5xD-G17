@@ -11,7 +11,6 @@ import pt.isel.pdm.drag.Keys
 import pt.isel.pdm.drag.databinding.ActivityDrawBinding
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
-import android.os.Handler
 import pt.isel.pdm.drag.showActivity.ShowActivity
 
 /**
@@ -19,25 +18,25 @@ import pt.isel.pdm.drag.showActivity.ShowActivity
  */
 class DrawActivity : AppCompatActivity() {
 
+    /**
+     * DELEGATED PROPRIETIES
+     * propriedades da classe, como só podem ser iniciadas depois da activity ser iniciada(depois do onCreate)
+     * para tal usamos a forma lazy
+     */
     private val binding: ActivityDrawBinding by lazy { ActivityDrawBinding.inflate(layoutInflater) }
     private val viewModel: DragViewModel by viewModels()
 
-    var handler = Handler()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(binding.root) //O PRIMEIRO ACESSO, Á DELEGATED PROPRIETIE É FEITO AQUI
 
         val playerCount = intent.getIntExtra(Keys.PLAYER_COUNT_KEY.name, 0)
         val roundCount = intent.getIntExtra(Keys.ROUND_COUNT_KEY.name, 0)
 
-
-
         viewModel.startGame(playerCount, roundCount)
         viewModel.initialWord(intent.getStringExtra(Keys.GAME_WORD_KEY.name).toString())
 
-        setContentView(binding.root)
         prepareListeners()
-
 
         viewModel.game.observe(this) {
             when (viewModel.game.value?.state) {
@@ -45,18 +44,13 @@ class DrawActivity : AppCompatActivity() {
                 State.GUESSING -> guessState()
             }
         }
-        timer=0
-        handler.post(timer())
-    }
 
-    fun timer(): Runnable {
-        var time = Runnable {}
-            time = Runnable {
-                binding.counter?.setText(timer.toString())
-                ++timer
-                handler.postDelayed(time, 1000)
-            }
-        return time
+        /*
+        viewModel.time.observe(this){
+            binding.counter?.text = viewModel.game.value?.timer.toString()
+        }
+        viewModel.changeTimer(1000)
+        */
     }
 
     /**
@@ -109,7 +103,6 @@ class DrawActivity : AppCompatActivity() {
 
     private fun setSubmitListener() {
         binding.submitButton.setOnClickListener {
-            timer = 0
             changeState()
         }
     }
@@ -129,5 +122,6 @@ class DrawActivity : AppCompatActivity() {
             intent.putExtra(Keys.GAME_KEY.name, model)
             startActivity(intent)
         }
+        viewModel.game.value?.timer = -1 //TODO TIRAR O NUMERO MAGICO
     }
 }
