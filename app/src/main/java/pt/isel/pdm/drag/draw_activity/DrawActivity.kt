@@ -59,11 +59,17 @@ class DrawActivity : AppCompatActivity() {
      *  adequa a activity á opção de quando é para desenhar
      */
     private fun drawOnGoing() {
-        viewModel.initiatePlayerDragDraw()
+        //viewModel.initiatePlayerDragDraw()
         binding.dragDrawView.viewModel = viewModel
         binding.userInput.visibility = View.INVISIBLE
         binding.hint.visibility = View.VISIBLE
+        binding.hint.text = viewModel.getOriginal()
+        /*
         binding.hint.text = viewModel.game.value?.currentWord
+        viewModel.addOriginal(viewModel.game.value!!.currentWord)   //TODO outra coisa
+
+         */
+        binding.userInput.editText?.setText("")
         setDrawListener()
     }
 
@@ -120,12 +126,17 @@ class DrawActivity : AppCompatActivity() {
 
     private fun changeState() {
         var model = viewModel.game.value!!
-        if (model.state == State.DRAWING) {
-            binding.userInput.editText?.setText("") //CLEAN THE PREVIOUS INPUT
-        }
+
+        //TODO: ver se é preciso
+        if (model.state == State.GUESSING)
+            viewModel.addGuess(binding.userInput.editText?.text.toString())
+        /*
         else {
-            viewModel.newWord(binding.userInput.editText?.text.toString())  //ADD the new word to the model
+            binding.userInput.editText?.setText("")
+            viewModel.game.value?.currentWord = ""
         }
+        */
+
 
         viewModel.changeState()
 
@@ -134,6 +145,7 @@ class DrawActivity : AppCompatActivity() {
             binding.gameOver?.text = "Round " + model.currentRoundNumber
         }
         runDelayed(10000) {
+
             binding.gameOver?.visibility = View.INVISIBLE
         }
 

@@ -64,9 +64,12 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
 
     private fun setTimer() {
         val roundBeforeTimer = game.value?.currentRoundNumber
+        val idBeforeTimer = game.value?.currentID
         val stateBeforeTimer = game.value?.state
-        runDelayed(60000) {
-            if (game.value?.currentRoundNumber == roundBeforeTimer && game.value?.state == stateBeforeTimer) {
+        runDelayed(6000L) {
+            if (game.value?.currentID == idBeforeTimer
+                    && game.value?.state == stateBeforeTimer
+                    && game.value?.currentRoundNumber == roundBeforeTimer) {
                 game.value?.timer = -1 //TODO TIRAR O NUMERO MAGICO
                 changeState()
             }
@@ -78,20 +81,25 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
      */
     fun changeState() {
         if (game.value?.state == State.DRAWING) {
+            game.value?.currentWord = ""
+            game.value?.addOriginal("")
             game.value?.state = State.GUESSING
-            game.value?.round = State.CURRENT_ROUND
-        } else {
+        } else if (game.value?.state == State.GUESSING) {
             addPlayerDraw()
+            /*
             if (game.value?.currentWord == "") {
-                newWord("NO GUESS FOUND")
+                game.value?.addGuess("NO GUESS FOUND")
             }
+             */
+            if (game.value?.getOriginal() == "") {
+                game.value?.addGuess("NO GUESS FOUND")
+            }
+
             if (game.value?.currentID == 0) {
                 addRound()
                 game.value?.round = State.NEW_ROUND
             }
-            else {
-                game.value?.round = State.CURRENT_ROUND
-            }
+
             if (game.value?.currentRoundNumber == game.value?.roundsNum)
                 game.value?.state = State.FINISHED
             else
@@ -142,15 +150,24 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
      * caso a nossa representação logica não tenha palavra é atribuida a palavra recebida
      */
     fun initialWord(word:String) {
-        if (game.value?.currentWord == "")
-            newWord(word)
+        if (game.value?.getOriginal() == "")
+        //if (game.value?.currentWord == "")
+            addOriginal(word)
     }
 
     /**
      * atualiza a palavra atual no modelo logico
      */
-    fun newWord(word: String) {
-        game.value?.currentWord = word
+    fun addGuess(word: String) {
+        game.value?.addGuess(word)
     }
+
+    fun addOriginal(original : String) {
+        game.value?.addOriginal(original)
+    }
+
+    fun getOriginal() = game.value?.getOriginal()
+
+    fun getGuess() = game.value?.getGuess()
 
 }

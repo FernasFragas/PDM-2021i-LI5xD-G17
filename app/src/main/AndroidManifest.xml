@@ -20,7 +20,8 @@
         </activity>
         <activity
             android:name=".draw_activity.DrawActivity"
-            android:theme="@style/Theme.DRAG.NoActionBar">
+            android:theme="@style/Theme.DRAG.NoActionBar"
+            android:noHistory="true" >
 
         </activity>
         <activity

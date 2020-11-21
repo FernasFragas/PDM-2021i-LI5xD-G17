@@ -9,13 +9,16 @@ import kotlinx.android.parcel.Parcelize
  * com isso é realizado pelo sistema da android
  */
 @Parcelize
-enum class State : Parcelable { GUESSING, DRAWING, FINISHED, NEW_ROUND, CURRENT_ROUND }
+data class Player(var dragDraw : DragDraw = DragDraw(), var originalWord : String = "", var guessedWord : String = "") : Parcelable
+
+@Parcelize
+enum class State : Parcelable { GUESSING, DRAWING, FINISHED, NEW_ROUND }
 
 @Parcelize
 data class DragGame(var playersNum: Int = 0,
                     var roundsNum: Int = 0,
-                    var allDraws: MutableList<Array<DragDraw>> = mutableListOf(),
-                    var currentRound: Array<DragDraw> = Array(playersNum) { DragDraw() }
+                    var allDraws: MutableList<Array<Player>> = mutableListOf(),
+                    var currentRound: Array<Player> = Array(playersNum) { Player() }
 ) : Parcelable{
 
     var currentID = 0
@@ -26,15 +29,16 @@ data class DragGame(var playersNum: Int = 0,
     var timer = 0
 
     fun createDrawingContainer() {
-        currentRound = Array(playersNum) { DragDraw() }  //declaração de array
+        currentRound = Array(playersNum) { Player() }  //declaração de array
     }
 
     fun startNewDraw() {
-        if (currentRound[currentID].draws.size == 0)
-            currentRound[currentID] = DragDraw()
+        if (currentRound[currentID].dragDraw.draws.size == 0) {
+            currentRound[currentID] = Player()
+        }
     }
 
-    fun getCurrentDraw() = currentRound[currentID]
+    fun getCurrentDraw() = currentRound[currentID].dragDraw
 
     fun savePlayer() {
         currentID = (currentID + 1) % playersNum
@@ -45,6 +49,20 @@ data class DragGame(var playersNum: Int = 0,
         currentRoundNumber++
         createDrawingContainer()
     }
+
+    fun addOriginal(original : String) {
+        currentRound[currentID].originalWord = original
+    }
+
+    fun addGuess(guess : String) {
+        currentRound[currentID].guessedWord = guess
+    }
+
+    fun getOriginal() = currentRound[currentID].originalWord
+
+    fun getGuess() = currentRound[currentID].guessedWord
+
+
 
 
 
