@@ -50,11 +50,11 @@ data class DragGame(var playersNum: Int = 0,
         createDrawingContainer()
     }
 
-    fun addOriginal(original : String) {
+    fun addOriginalWord(original : String) {
         currentRound[currentID].originalWord = original
     }
 
-    fun addGuess(guess : String) {
+    fun addGuessedWord(guess : String) {
         currentRound[currentID].guessedWord = guess
     }
 

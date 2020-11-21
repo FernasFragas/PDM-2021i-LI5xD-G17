@@ -63,7 +63,7 @@ class DrawActivity : AppCompatActivity() {
         binding.dragDrawView.viewModel = viewModel
         binding.userInput.visibility = View.INVISIBLE
         binding.hint.visibility = View.VISIBLE
-        binding.hint.text = viewModel.getOriginal()
+        binding.hint.text = viewModel.getOriginalWord()
         /*
         binding.hint.text = viewModel.game.value?.currentWord
         viewModel.addOriginal(viewModel.game.value!!.currentWord)   //TODO outra coisa

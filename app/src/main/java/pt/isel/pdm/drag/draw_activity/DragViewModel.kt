@@ -82,17 +82,16 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
     fun changeState() {
         if (game.value?.state == State.DRAWING) {
             game.value?.currentWord = ""
-            game.value?.addOriginal("")
             game.value?.state = State.GUESSING
         } else if (game.value?.state == State.GUESSING) {
-            addPlayerDraw()
+            addPlayerID()
             /*
             if (game.value?.currentWord == "") {
                 game.value?.addGuess("NO GUESS FOUND")
             }
              */
-            if (game.value?.getOriginal() == "") {
-                game.value?.addGuess("NO GUESS FOUND")
+            if (game.value?.getGuess() == "") {
+                game.value?.addGuessedWord("NO GUESS FOUND")
             }
 
             if (game.value?.currentID == 0) {
@@ -121,7 +120,7 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
     /**
      * incrementa o id do player
      */
-    fun addPlayerDraw() {
+    fun addPlayerID() {
         game.value?.savePlayer()
     }
 
@@ -152,21 +151,21 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
     fun initialWord(word:String) {
         if (game.value?.getOriginal() == "")
         //if (game.value?.currentWord == "")
-            addOriginal(word)
+            addOriginalWord(word)
     }
 
     /**
      * atualiza a palavra atual no modelo logico
      */
     fun addGuess(word: String) {
-        game.value?.addGuess(word)
+        game.value?.addGuessedWord(word)
     }
 
-    fun addOriginal(original : String) {
-        game.value?.addOriginal(original)
+    fun addOriginalWord(original : String) {
+        game.value?.addOriginalWord(original)
     }
 
-    fun getOriginal() = game.value?.getOriginal()
+    fun getOriginalWord() = game.value?.getOriginal()
 
     fun getGuess() = game.value?.getGuess()
 
