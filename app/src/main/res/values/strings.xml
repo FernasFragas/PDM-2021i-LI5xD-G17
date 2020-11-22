@@ -29,4 +29,7 @@
     <string name="camera">Camera</string>
     <string name="dog">Dog</string>
     <string name="cat">Cat</string>
+    <string name="rounds">"Round: "</string>
+    <string name="drawing_word">Drawing word:</string>
+    <string name="guessed_word">Guessed word:</string>
 </resources>

@@ -5,7 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import androidx.activity.viewModels
-import pt.isel.pdm.drag.Keys
+import kotlinx.android.synthetic.main.activity_show.view.*
+import pt.isel.pdm.drag.utils.Keys
 import pt.isel.pdm.drag.databinding.ActivityShowBinding
 import pt.isel.pdm.drag.draw_activity.DragViewModel
 import pt.isel.pdm.drag.draw_activity.model.DragGame
@@ -53,6 +54,7 @@ class ShowActivity : AppCompatActivity() {
         viewModel.game.value?.currentRound = model.allDraws[model.currentRoundNumber]
         viewModel.game.value?.playersNum = model.playersNum
         viewModel.game.value?.roundsNum = model.roundsNum
+        updateVisually()
 
 
         setListeners()
@@ -83,17 +85,28 @@ class ShowActivity : AppCompatActivity() {
 
         when(swipeState) {
             SwipeState.RIGHT -> {
-                if (game.currentID != 0)
+                if (game.currentID != 0) {
                     game.currentID = game.currentID - 1
+                    updateVisually()
+                }
             }
             SwipeState.LEFT -> {
-                if (game.currentID != game.playersNum - 1)
+                if (game.currentID != game.playersNum - 1) {
                     game.currentID = game.currentID + 1
+                    updateVisually()
+                }
                 else {
                     game.currentRoundNumber = (game.currentRoundNumber + 1) % game.roundsNum
                     viewModel.game.value?.currentRound = game.allDraws[game.currentRoundNumber]
                 }
             }
         }
+        updateVisually()
+    }
+
+    private fun updateVisually() {
+        binding.roundNumberShow.text = "${(viewModel.game.value!!.currentRoundNumber + 1)}"
+        binding.originalWordShow.text = viewModel.game.value?.getOriginal()
+        binding.guessedWordShow.text = viewModel.game.value?.getGuess()
     }
 }

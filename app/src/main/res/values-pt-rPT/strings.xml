@@ -28,4 +28,7 @@
     <string name="camera">Câmera</string>
     <string name="dog">Cão</string>
     <string name="cat">Gato</string>
+    <string name="rounds">Ronda: </string>
+    <string name="drawing_word">Palavra a desenhar:</string>
+    <string name="guessed_word">Palavra adivinhada:</string>
 </resources>

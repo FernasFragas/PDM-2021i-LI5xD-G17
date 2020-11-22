@@ -7,7 +7,7 @@ import android.view.MotionEvent.*
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import pt.isel.pdm.drag.Keys
+import pt.isel.pdm.drag.utils.Keys
 import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityDrawBinding
 import pt.isel.pdm.drag.draw_activity.model.Position
@@ -44,10 +44,15 @@ class DrawActivity : AppCompatActivity() {
             when (viewModel.game.value?.state) {
                 State.DRAWING -> drawOnGoing()
                 State.GUESSING -> guessState()
-                State.FINISHED -> finishState()
+                State.FINISH_SCREEN -> finishState()
+                State.NEW_ROUND -> newRoundState()
+                State.CHANGE_ACTIVITY -> changeActivity()
             }
+            /*
             if(viewModel.game.value?.round == State.NEW_ROUND)
                 newRoundState()
+
+             */
 
         }
 
@@ -59,13 +64,22 @@ class DrawActivity : AppCompatActivity() {
         */
     }
 
+    private fun changeActivity() {
+        val intent = Intent(this, ShowActivity::class.java)
+        intent.putExtra(Keys.GAME_KEY.name, viewModel.game.value!!)
+        startActivity(intent)
+    }
+
     /**
      *  adequa a activity á opção de quando é para desenhar
      */
     private fun drawOnGoing() {
+        binding.divider2.visibility = View.VISIBLE
         binding.dragDrawView.viewModel = viewModel
-        binding.userInput.visibility = View.INVISIBLE
+        binding.userInput.visibility = View.GONE
         binding.hint.visibility = View.VISIBLE
+        binding.gameOver?.visibility = View.GONE
+        binding.submitButton.visibility = View.VISIBLE
         binding.hint.text = viewModel.getOriginalWord()
         binding.userInput.editText?.setText("")
         setDrawListener()
@@ -75,51 +89,54 @@ class DrawActivity : AppCompatActivity() {
      * adequa a activity á opção de quando é para adivinhar
      */
     private fun guessState() {
+        binding.divider2.visibility = View.VISIBLE
         binding.userInput.visibility = View.VISIBLE
-        binding.hint.visibility = View.INVISIBLE
+        binding.hint.visibility = View.GONE
+        binding.gameOver?.visibility = View.GONE
+        binding.submitButton.visibility = View.VISIBLE
     }
 
     /**
      * logica do estado newState
      */
     private fun newRoundState() {
-        var model = viewModel.game.value!!
-        if(model.round == State.NEW_ROUND && model.state != State.FINISHED) {
-            binding.gameOver?.visibility = View.VISIBLE
-            binding.gameOver?.text = "Round " + model.currentRoundNumber
-            runDelayed(3000) {
-                binding.gameOver?.visibility = View.INVISIBLE
-            }
-        }
+        binding.divider2.visibility = View.GONE
+        binding.userInput.visibility = View.GONE
+        binding.hint.visibility = View.GONE
+        binding.gameOver?.visibility = View.VISIBLE
+        binding.submitButton.visibility = View.GONE
+        binding.gameOver?.text = "Round " + viewModel.game.value?.currentRoundNumber
+
     }
 
     private fun finishState() {
-        binding.submitButton.isEnabled = false
+        binding.divider2.visibility = View.GONE
+        binding.userInput.visibility = View.GONE
+        binding.hint.visibility = View.GONE
+        binding.submitButton.visibility = View.GONE
         binding.gameOver?.visibility = View.VISIBLE
         binding.gameOver?.text = this.applicationContext.getText(R.string.Over)
-        runDelayed(3000) {
-            val intent = Intent(this, ShowActivity::class.java)
-            intent.putExtra(Keys.GAME_KEY.name, viewModel.game.value!!)
-            startActivity(intent)
-        }
     }
 
     /**
      * Listeners
      */
     private fun prepareListeners() {
-        presentation()
+        //presentation()
         setDrawListener()
         setSubmitListener()
     }
 
+    /*
     private fun presentation() {
         binding.gameOver?.visibility = View.VISIBLE
-        binding.gameOver?.text = "Round " +  viewModel.game.value!!.currentRoundNumber
+        binding.gameOver?.text = "Round Number: " + viewModel.game.value!!.currentRoundNumber
         runDelayed(3000) {
             binding.gameOver?.visibility = View.INVISIBLE
         }
     }
+
+     */
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setDrawListener() {

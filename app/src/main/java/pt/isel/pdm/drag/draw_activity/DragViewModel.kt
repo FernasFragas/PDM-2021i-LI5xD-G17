@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import pt.isel.pdm.drag.draw_activity.model.DragGame
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
+import pt.isel.pdm.drag.utils.Timers
 import pt.isel.pdm.drag.utils.runDelayed
 
 /**
@@ -66,11 +67,18 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
         val roundBeforeTimer = game.value?.currentRoundNumber
         val idBeforeTimer = game.value?.currentID
         val stateBeforeTimer = game.value?.state
-        runDelayed(60000L) {
+        var seconds = when (stateBeforeTimer){
+            State.DRAWING -> Timers.DRAWING_TIME.time
+            State.GUESSING -> Timers.GUESSING_TIME.time
+            State.FINISH_SCREEN -> Timers.FINISH_TIME.time
+            State.NEW_ROUND -> Timers.NEW_ROUND_TIME.time
+            else -> 0
+        }
+        runDelayed(seconds * 1000L) {
             if (game.value?.currentID == idBeforeTimer
                     && game.value?.state == stateBeforeTimer
                     && game.value?.currentRoundNumber == roundBeforeTimer
-                    && game.value?.state != State.FINISHED) {
+                    && game.value?.state != State.CHANGE_ACTIVITY) {
                 game.value?.timer = -1 //TODO TIRAR O NUMERO MAGICO
                 changeState()
             }
@@ -81,39 +89,41 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
      * verifica se é para desenhar ou advinhar
      */
     fun changeState() {
-        if (game.value?.state == State.DRAWING) {
-            game.value?.state = State.GUESSING
-        } else if (game.value?.state == State.GUESSING) {
-            var word = getGuess()
-            if (word == "") {
-                word = "NO GUESS FOUND"
-                game.value?.addGuessedWord(word)
+        when (game.value?.state) {
+            State.DRAWING -> game.value?.state = State.GUESSING
+            State.GUESSING -> {
+                var word = getGuess()
+                if (word == "") {
+                    word = "NO GUESS FOUND"
+                    game.value?.addGuessedWord(word)
+                }
+
+                addPlayerID()
+
+                updateGuessingState()
+
+                game.value?.addOriginalWord(word)
+
             }
-            addPlayerID()
-
-            if (game.value?.currentID == 0) {
-                addRound()
-                game.value?.round = State.NEW_ROUND
-            } else {game.value?.round = State.NOT_NEW_ROUND}
-
-            game.value?.addOriginalWord(word)
-
-            if (game.value?.currentRoundNumber == game.value?.roundsNum)
-                game.value?.state = State.FINISHED
-            else
-                game.value?.state = State.DRAWING
+            State.NEW_ROUND -> game.value?.state = State.DRAWING
+            State.FINISH_SCREEN -> {game.value?.state = State.CHANGE_ACTIVITY }
         }
         game.value = game.value
         savedState[SAVED_STATE_KEY] = game.value
         setTimer()
     }
 
+    private fun isFinished() = game.value?.currentRoundNumber == game.value?.roundsNum
 
-    /**
-     * metodo talvez necessario para os varios jogadores
-     */
-    fun initiatePlayerDragDraw() {
-        game.value?.startNewDraw()
+    private fun updateGuessingState() {
+        if (game.value?.currentID == 0) {
+            addRound()
+            if (isFinished())
+                game.value?.state = State.FINISH_SCREEN
+            else
+                game.value?.state = State.NEW_ROUND
+        } else
+            game.value?.state = State.DRAWING
     }
 
     /**
@@ -149,7 +159,6 @@ class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
      */
     fun initialWord(word:String) {
         if (game.value?.getOriginal() == "")
-        //if (game.value?.currentWord == "")
             addOriginalWord(word)
     }
 
