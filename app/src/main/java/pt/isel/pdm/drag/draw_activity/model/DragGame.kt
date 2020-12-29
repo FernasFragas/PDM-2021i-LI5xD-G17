@@ -28,6 +28,9 @@ data class DragGame(var playersNum: Int = 0,
     var round = State.NEW_ROUND
     var timer = 0
 
+    /**
+     * Its created one per round, each round has one array with the size of the number of players
+     * **/
     fun createDrawingContainer() {
         currentRound = Array(playersNum) { Player() }  //declaração de array
     }
