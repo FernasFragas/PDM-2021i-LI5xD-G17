@@ -65,6 +65,7 @@ class DrawActivity : AppCompatActivity() {
     }
 
     private fun changeActivity() {
+        //viewModel.gameRepo.saveGame(viewModel.game.value!!)
         val intent = Intent(this, ShowActivity::class.java)
         intent.putExtra(Keys.GAME_KEY.name, viewModel.game.value!!)
         startActivity(intent)

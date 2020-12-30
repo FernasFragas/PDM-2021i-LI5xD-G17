@@ -1,13 +1,35 @@
 package pt.isel.pdm.drag.draw_activity
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.room.Room
 import pt.isel.pdm.drag.draw_activity.model.DragGame
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
 import pt.isel.pdm.drag.utils.Timers
+import pt.isel.pdm.drag.utils.data.GameDataBase
+import pt.isel.pdm.drag.utils.data.GameRepository
 import pt.isel.pdm.drag.utils.runDelayed
+/*
+/**
+ *
+ */
+private const val GLOBAL_PREFS = "GlobalPreferences"
+
+class DragApplication : Application() {
+
+    val gameRepository by lazy {
+        GameRepository(
+                getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE),
+                Room.databaseBuilder(this, GameDataBase::class.java, "GameDB").build()
+        )
+    }
+}
+*/
+
 
 /**
  * no construtor desta classe vai ser passado uma instancia de um tipo que tem um estado da activity
@@ -17,11 +39,15 @@ import pt.isel.pdm.drag.utils.runDelayed
 private const val SAVED_STATE_KEY = "DragViewModel.SavedState"
 
 
-class DragViewModel(private val savedState: SavedStateHandle) : ViewModel() {
+class DragViewModel(private val savedState: SavedStateHandle): ViewModel() {
 
     val game: MutableLiveData<DragGame> by lazy {
         MutableLiveData<DragGame>(savedState.get<DragGame>(SAVED_STATE_KEY) ?: DragGame())
     }
+/*
+    val gameRepo by lazy {
+        getApplication<DragApplication>().gameRepository
+    }*/
 /*
     val time: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>(0)
