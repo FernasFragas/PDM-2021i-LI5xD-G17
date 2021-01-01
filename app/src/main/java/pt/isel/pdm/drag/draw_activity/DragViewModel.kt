@@ -10,25 +10,10 @@ import pt.isel.pdm.drag.draw_activity.model.DragGame
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
 import pt.isel.pdm.drag.utils.Timers
+import pt.isel.pdm.drag.utils.data.DragApplication
 import pt.isel.pdm.drag.utils.data.GameDataBase
 import pt.isel.pdm.drag.utils.data.GameRepository
 import pt.isel.pdm.drag.utils.runDelayed
-/*
-/**
- *
- */
-private const val GLOBAL_PREFS = "GlobalPreferences"
-
-class DragApplication : Application() {
-
-    val gameRepository by lazy {
-        GameRepository(
-                getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE),
-                Room.databaseBuilder(this, GameDataBase::class.java, "GameDB").build()
-        )
-    }
-}
-*/
 
 
 /**
@@ -39,15 +24,16 @@ class DragApplication : Application() {
 private const val SAVED_STATE_KEY = "DragViewModel.SavedState"
 
 
-class DragViewModel(private val savedState: SavedStateHandle): ViewModel() {
+class DragViewModel(private val savedState: SavedStateHandle,
+                    application: DragApplication): AndroidViewModel(application) {
 
     val game: MutableLiveData<DragGame> by lazy {
         MutableLiveData<DragGame>(savedState.get<DragGame>(SAVED_STATE_KEY) ?: DragGame())
     }
-/*
+
     val gameRepo by lazy {
         getApplication<DragApplication>().gameRepository
-    }*/
+    }
 /*
     val time: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>(0)
@@ -131,7 +117,10 @@ class DragViewModel(private val savedState: SavedStateHandle): ViewModel() {
                 game.value?.addOriginalWord(word)
 
             }
-            State.NEW_ROUND -> game.value?.state = State.DRAWING
+            State.NEW_ROUND -> {
+                gameRepo.saveGame(game.value!!)     //save game in the dp of repository
+                game.value?.state = State.DRAWING
+            }
             State.FINISH_SCREEN -> {game.value?.state = State.CHANGE_ACTIVITY }
         }
         game.value = game.value
