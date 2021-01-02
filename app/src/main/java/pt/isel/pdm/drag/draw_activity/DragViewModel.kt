@@ -19,6 +19,8 @@ import pt.isel.pdm.drag.utils.runDelayed
 /**
  * no construtor desta classe vai ser passado uma instancia de um tipo que tem um estado da activity
  * que foi preservado,(está relacionado com a lifecycle)
+ *
+ * no construtor é tambem passado a instancia application onde é criado a repo com a db
  */
 
 private const val SAVED_STATE_KEY = "DragViewModel.SavedState"
@@ -120,10 +122,12 @@ class DragViewModel(
 
             }
             State.NEW_ROUND -> {
-                gameRepo.saveGame(game.value!!)     //save game in the dp of repository
                 game.value?.state = State.DRAWING
             }
-            State.FINISH_SCREEN -> {game.value?.state = State.CHANGE_ACTIVITY }
+            State.FINISH_SCREEN -> {
+                gameRepo.saveGame(game.value!!)     //save game in the dp of repository
+                game.value?.state = State.CHANGE_ACTIVITY
+            }
         }
         game.value = game.value
         savedState[SAVED_STATE_KEY] = game.value
@@ -165,9 +169,10 @@ class DragViewModel(
     }
 
     /**
-     * incrementa o valor da rounda na nossa representação logica do jogo
+     * incrementa o valor da ronda na nossa representação logica do jogo
      */
     fun addRound() {
+        gameRepo.saveGame(game.value!!)     //save game in the dp of repository
         game.value?.addRound()
     }
 

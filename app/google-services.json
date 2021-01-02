@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "114166307299",
+    "project_id": "pdmdragapp",
+    "storage_bucket": "pdmdragapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114166307299:android:49404d2c484862b6d7a8d6",
+        "android_client_info": {
+          "package_name": "pt.isel.pdm.drag"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114166307299-uda16qr43tuas9dr4v0kkd9i11nhqf7t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB27R5L5zdZBPqmbgeIr_XJ8cRIRwAJGI8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114166307299-uda16qr43tuas9dr4v0kkd9i11nhqf7t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

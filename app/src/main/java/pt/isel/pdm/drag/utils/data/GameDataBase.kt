@@ -8,11 +8,16 @@ import pt.isel.pdm.drag.draw_activity.model.Lines
 import pt.isel.pdm.drag.draw_activity.model.Player
 import pt.isel.pdm.drag.draw_activity.model.Position
 
+/**
+ * in this class is all the necessary logic for the DataBase of the repository
+ */
+
 @Database(entities = [GameResult.rounds::class, GameResult.currentRound::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class GameDataBase : RoomDatabase() {
 
     abstract fun getGameResultsDao(): GameResultDao
+
 }
 
 /**

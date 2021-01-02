@@ -14,6 +14,6 @@ interface GameResultDao {
     @Query("SELECT * FROM rounds")
     fun loadRounds(): List<GameResult.rounds>
 
-    @Insert
+    @Insert(entity = GameResult.rounds::class)
     fun insertRounds(game: GameResult.rounds)
 }

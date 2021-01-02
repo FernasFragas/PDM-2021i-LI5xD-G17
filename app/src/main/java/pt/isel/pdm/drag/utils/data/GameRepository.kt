@@ -16,6 +16,8 @@ private const val NUMBER_OF_ROUNDS = "NumberOfPRounds"
  *
  * App repository contains information about the game
  *
+ * all the functions needed to operato with the db are in this class
+ *
  */
 class GameRepository (
         private val sharedPreferences: SharedPreferences,
@@ -97,6 +99,6 @@ class GameRepository (
      *
      */
     fun loadGame() {
-
+        
     }
 }
