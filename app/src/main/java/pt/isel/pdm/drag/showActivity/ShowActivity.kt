@@ -79,6 +79,7 @@ class ShowActivity : AppCompatActivity() {
     }
 
 
+    //TODO PROBLEMA DE LOGICA
     private fun doSwipe(swipeState: SwipeState) {
 
         val game = viewModel.game.value!!

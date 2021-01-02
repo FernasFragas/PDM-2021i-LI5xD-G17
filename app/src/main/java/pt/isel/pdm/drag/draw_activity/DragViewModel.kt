@@ -24,8 +24,10 @@ import pt.isel.pdm.drag.utils.runDelayed
 private const val SAVED_STATE_KEY = "DragViewModel.SavedState"
 
 
-class DragViewModel(private val savedState: SavedStateHandle,
-                    application: DragApplication): AndroidViewModel(application) {
+class DragViewModel(
+        application: Application,
+        private val savedState: SavedStateHandle,
+): AndroidViewModel(application) {
 
     val game: MutableLiveData<DragGame> by lazy {
         MutableLiveData<DragGame>(savedState.get<DragGame>(SAVED_STATE_KEY) ?: DragGame())
