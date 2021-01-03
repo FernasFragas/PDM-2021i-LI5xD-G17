@@ -36,8 +36,8 @@
 
     <!-- Create challenge screen -->
     <string name="create_challenge_title">Create Challenge</string>
-    <string name="create_challenge_prompt_challenger_name">Name</string>
-    <string name="create_challenge_prompt_message">Message</string>
+    <string name="create_challenge_challenges_name">Name of the Challenge</string>
+    <string name="create_challenge_prompt_message">Number of players</string>
     <string name="create_challenge_button_label">Post challenge</string>
     <string name="create_challenge_button_label_in_short">Post it</string>
     <string name="error_creating_challenge">Could not create challenge.</string>

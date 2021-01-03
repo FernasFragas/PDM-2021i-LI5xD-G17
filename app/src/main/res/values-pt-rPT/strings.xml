@@ -32,8 +32,8 @@
     <string name="drawing_word">Palavra a desenhar:</string>
     <string name="guessed_word">Palavra adivinhada:</string>
     <string name="create_challenge_title">Criar Desafio</string>
-    <string name="create_challenge_prompt_challenger_name">Nome</string>
-    <string name="create_challenge_prompt_message">Mensagem</string>
+    <string name="create_challenge_challenges_name">Nome do Desafio</string>
+    <string name="create_challenge_prompt_message">Número de jogadores</string>
     <string name="error_creating_challenge">Falha ao criar o desafio</string>
     <string name="accept_challenge_dialog_ok">OK</string>
     <string name="accept_challenge_dialog_cancel">Cancelar</string>
