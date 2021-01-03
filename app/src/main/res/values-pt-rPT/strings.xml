@@ -31,4 +31,19 @@
     <string name="rounds">Ronda: </string>
     <string name="drawing_word">Palavra a desenhar:</string>
     <string name="guessed_word">Palavra adivinhada:</string>
+    <string name="create_challenge_title">Criar Desafio</string>
+    <string name="create_challenge_prompt_challenger_name">Nome</string>
+    <string name="create_challenge_prompt_message">Mensagem</string>
+    <string name="error_creating_challenge">Falha ao criar o desafio</string>
+    <string name="accept_challenge_dialog_ok">OK</string>
+    <string name="accept_challenge_dialog_cancel">Cancelar</string>
+    <string name="loading">A Carregar...</string>
+    <string name="accept_challenge_dialog_title">Acetar o desafio de %s\?</string>
+    <string name="create_challenge_button_label">Publicar desafio</string>
+    <string name="create_challenge_button_label_in_short">Publicar</string>
+    <string name="list_screen_title">Desafios</string>
+    <string name="list_create_challenge_button_label">Novo desafio</string>
+    <string name="list_menu_update_label">Atualizar</string>
+    <string name="error_getting_list">Impossivel obter a lista de desafios</string>
+    <string name="error_accepting_challenge">Impossivel aceitar o desafio</string>
 </resources>
