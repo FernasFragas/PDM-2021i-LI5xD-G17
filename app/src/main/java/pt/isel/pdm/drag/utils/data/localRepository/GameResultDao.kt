@@ -1,4 +1,4 @@
-package pt.isel.pdm.drag.utils.data
+package pt.isel.pdm.drag.utils.data.localRepository
 
 import androidx.room.Dao
 import androidx.room.Insert

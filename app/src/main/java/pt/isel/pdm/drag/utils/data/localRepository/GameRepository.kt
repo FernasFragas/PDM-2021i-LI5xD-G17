@@ -1,8 +1,7 @@
-package pt.isel.pdm.drag.utils.data
+package pt.isel.pdm.drag.utils.data.localRepository
 
 import android.content.SharedPreferences
 import pt.isel.pdm.drag.draw_activity.model.DragGame
-import pt.isel.pdm.drag.draw_activity.model.Player
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 

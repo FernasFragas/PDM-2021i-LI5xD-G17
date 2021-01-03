@@ -4,15 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.room.Room
 import pt.isel.pdm.drag.draw_activity.model.DragGame
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
 import pt.isel.pdm.drag.utils.Timers
 import pt.isel.pdm.drag.utils.data.DragApplication
-import pt.isel.pdm.drag.utils.data.GameDataBase
-import pt.isel.pdm.drag.utils.data.GameRepository
 import pt.isel.pdm.drag.utils.runDelayed
 
 

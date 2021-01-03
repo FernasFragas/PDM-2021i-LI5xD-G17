@@ -1,11 +1,10 @@
-package pt.isel.pdm.drag.utils.data
+package pt.isel.pdm.drag.utils.data.localRepository
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import pt.isel.pdm.drag.draw_activity.model.Lines
-import pt.isel.pdm.drag.draw_activity.model.Player
 import pt.isel.pdm.drag.draw_activity.model.Position
 
 /**
