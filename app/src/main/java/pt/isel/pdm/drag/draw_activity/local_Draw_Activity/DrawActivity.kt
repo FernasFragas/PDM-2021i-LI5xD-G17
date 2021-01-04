@@ -1,4 +1,4 @@
-package pt.isel.pdm.drag.draw_activity
+package pt.isel.pdm.drag.draw_activity.local_Draw_Activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,10 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import pt.isel.pdm.drag.utils.Keys
 import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityDrawBinding
+import pt.isel.pdm.drag.draw_activity.DragViewModel
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
 import pt.isel.pdm.drag.showActivity.ShowActivity
-import pt.isel.pdm.drag.utils.runDelayed
 
 /**
  * Activity referent for drawing

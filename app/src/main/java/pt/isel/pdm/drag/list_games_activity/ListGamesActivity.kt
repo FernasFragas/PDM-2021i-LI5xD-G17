@@ -20,6 +20,9 @@ private const val CREATE_CODE = 10001
 
 class ListGamesActivity : AppCompatActivity(){
 
+    /**
+     * updates the list displayed with the game in the fundraising stage
+     */
     private fun updateChallengesList() {
         binding.refreshLayout.isRefreshing = true
         viewModel.fetchChallenges()
@@ -33,7 +36,7 @@ class ListGamesActivity : AppCompatActivity(){
      */
     private fun challengeSelected(challenge: ChallengeInfo) {
         AlertDialog.Builder(this)
-            .setTitle(getString(R.string.accept_challenge_dialog_title, challenge.id))
+            .setTitle(getString(R.string.accept_challenge_dialog_title, challenge.challengeName))
             .setPositiveButton(R.string.accept_challenge_dialog_ok) { _, _ -> viewModel.tryAcceptChallenge(challenge) }
             .setNegativeButton(R.string.accept_challenge_dialog_cancel, null)
             .create()
@@ -51,7 +54,7 @@ class ListGamesActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.challengesList.setHasFixedSize(true)
+        binding.challengesList.setHasFixedSize(true)    //adapter changes cannot affect the size of the RecyclerView
         binding.challengesList.layoutManager = LinearLayoutManager(this)
 
         // Get view model instance and add its contents to the recycler view
@@ -65,6 +68,7 @@ class ListGamesActivity : AppCompatActivity(){
             updateChallengesList()
         }
 
+        //make the "connection" between the ListGamesActivity and the addGameActivity
         binding.createChallengeButton.setOnClickListener {
             startActivityForResult(Intent(this, AddGameActivity::class.java),
                     CREATE_CODE

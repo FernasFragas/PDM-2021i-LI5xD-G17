@@ -15,7 +15,7 @@
             android:noHistory="true" >
         </activity>
         <activity
-            android:name=".draw_activity.DrawActivity"
+            android:name=".draw_activity.local_Draw_Activity.DrawActivity"
             android:theme="@style/Theme.DRAG.NoActionBar"
             android:noHistory="true" >
 

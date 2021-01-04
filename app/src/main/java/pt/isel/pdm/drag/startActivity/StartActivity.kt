@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.activity_start_layout.*
 import pt.isel.pdm.drag.utils.Keys
 import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityStartLayoutBinding
-import pt.isel.pdm.drag.draw_activity.DrawActivity
+import pt.isel.pdm.drag.draw_activity.local_Draw_Activity.DrawActivity
 
 class StartActivity : AppCompatActivity() {
 

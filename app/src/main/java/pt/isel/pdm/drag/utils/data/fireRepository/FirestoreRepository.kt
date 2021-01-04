@@ -63,7 +63,9 @@ class FirestoreRepository(private val mapper: ObjectMapper) {
 
         FirebaseFirestore.getInstance()
                 .collection(CHALLENGES_COLLECTION)
-                .add(hashMapOf(CHALLENGE_NAME to gameName, PLAYER_CAPACITY to playersCapacity))
+                .add(hashMapOf(CHALLENGE_NAME to gameName, PLAYER_CAPACITY to playersCapacity,
+                        PLAYER_CAPACITY to playersCapacity.toLong(), PLAYER_COUNT to 1,
+                        ROUND_NUMBER to roundNumber))
                 .addOnSuccessListener{
                     onSuccess(
                             ChallengeInfo(
@@ -95,6 +97,10 @@ class FirestoreRepository(private val mapper: ObjectMapper) {
                 .addOnFailureListener { onError(it) }
     }
 
+    /**
+    * updates the challenge info in the cloud with the new number of players that already enroll the
+    * challenge
+    */
     private fun updatePlayerCount(challengeInfo: ChallengeInfo,
                                   onSuccess: () -> Unit,
                                   onError: (Exception) -> Unit) {
@@ -107,6 +113,16 @@ class FirestoreRepository(private val mapper: ObjectMapper) {
 
     }
 
+    /**
+     * updates the challenge with a new player and,
+     *
+     * if the number of players is completed removes the challenge from
+     * the list of the the games in fundraising state
+     *
+     * if the number of players with the new player is not enough to start the game, only updates
+     * the challenge info in the cloud with the new number of players that already enroll the
+     * challenge
+     */
     fun addPlayer(challengeInfo: ChallengeInfo,
                   onSuccess: () -> Unit,
                   onError: (Exception) -> Unit) {
