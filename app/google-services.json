@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "114166307299",
-    "project_id": "pdmdragapp",
-    "storage_bucket": "pdmdragapp.appspot.com"
+    "project_number": "789240678001",
+    "project_id": "jogo-26f9b",
+    "storage_bucket": "jogo-26f9b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:114166307299:android:49404d2c484862b6d7a8d6",
+        "mobilesdk_app_id": "1:789240678001:android:92b6cbc01f8fb4b786bdd0",
         "android_client_info": {
           "package_name": "pt.isel.pdm.drag"
         }
       },
       "oauth_client": [
         {
-          "client_id": "114166307299-uda16qr43tuas9dr4v0kkd9i11nhqf7t.apps.googleusercontent.com",
+          "client_id": "789240678001-8776o9c9mkjcg7mbd8qailql5gd77is9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB27R5L5zdZBPqmbgeIr_XJ8cRIRwAJGI8"
+          "current_key": "AIzaSyCvSbsY39Izy5ok0HjpduAeFzhyNnVtHeM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "114166307299-uda16qr43tuas9dr4v0kkd9i11nhqf7t.apps.googleusercontent.com",
+              "client_id": "789240678001-8776o9c9mkjcg7mbd8qailql5gd77is9.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

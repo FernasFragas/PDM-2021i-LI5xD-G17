@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    android:background="@drawable/list_item_background"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+  <TextView
+      android:id="@+id/challengeName"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      tools:text="@tools:sample/lorem" />
+
+  <TextView
+      android:id="@+id/rounds"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      tools:text="Round Number:%s\" />
+
+  <TextView
+      android:id="@+id/currentPlayers"
+      android:layout_width="132dp"
+      android:layout_height="wrap_content"
+      tools:text="%s\/%s\ Players" />
+
+</LinearLayout>

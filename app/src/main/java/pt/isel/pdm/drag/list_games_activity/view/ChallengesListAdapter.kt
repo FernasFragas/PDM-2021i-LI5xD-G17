@@ -9,16 +9,19 @@ import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import pt.isel.pdm.drag.R
-import pt.isel.pdm.drag.list_games_activity.ChallengeInfo
+import pt.isel.pdm.drag.utils.ChallengeInfo
 
+
+//TODO POR AS STRINGS BEM
 /**
  * Represents views (actually, the corresponding holder) that display the information pertaining to
  * a [ChallengeInfo] instance
  */
 class ChallengeViewHolder(private val view: ViewGroup) : RecyclerView.ViewHolder(view) {
 
-    private val challengerNameView: TextView = view.findViewById(R.id.challengerName)
-    private val challengerMessageView: TextView = view.findViewById(R.id.message)
+    private val challengeNameView: TextView = view.findViewById(R.id.challengeName)
+    private val roundNumberView: TextView = view.findViewById(R.id.rounds)
+    private val playersInformationView: TextView = view.findViewById(R.id.currentPlayers)
 
     /**
      * Starts the item selection animation and calls [onAnimationEnd] once the animation ends
@@ -50,8 +53,9 @@ class ChallengeViewHolder(private val view: ViewGroup) : RecyclerView.ViewHolder
      * @param   itemSelectedListener    the function to be called whenever the item is selected
      */
     fun bindTo(challenge: ChallengeInfo?, itemSelectedListener: (ChallengeInfo) -> Unit) {
-        challengerNameView.text = challenge?.challengerName ?: ""
-        challengerMessageView.text = challenge?.challengerMessage ?: ""
+        challengeNameView.text = challenge?.challengeName ?: ""
+        roundNumberView.text = "Round Number: ${challenge?.roundNum.toString()}"
+        playersInformationView.text = "${challenge?.playerNum}/${challenge?.playerCapacity}"
 
         if (challenge != null)
             view.setOnClickListener {

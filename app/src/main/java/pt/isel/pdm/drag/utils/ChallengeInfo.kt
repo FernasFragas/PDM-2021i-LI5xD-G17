@@ -10,7 +10,15 @@ import kotlinx.android.parcel.Parcelize
  *
  * @property [id]                   challenge identifier
  * @property [challengeName]        challenge name
- * @property [playersNumb]          number needed of players for the challenge begin
+ * @property [playerCapacity]       max number of players for this challenge
+ * @property playerNum              amount of players in this challenge
+ * @property roundNum               number of rounds for this challenge
  */
 @Parcelize
-data class ChallengeInfo(val id: String, val challengeName: String, val playersNumb: Int): Parcelable
+data class ChallengeInfo(
+        val id: String,
+        val challengeName: String,
+        val playerCapacity: Long,
+        var playerNum: Long,
+        val roundNum: Long
+): Parcelable

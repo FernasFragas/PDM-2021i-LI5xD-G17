@@ -46,4 +46,8 @@
     <string name="list_menu_update_label">Atualizar</string>
     <string name="error_getting_list">Impossivel obter a lista de desafios</string>
     <string name="error_accepting_challenge">Impossivel aceitar o desafio</string>
+    <string name="max_players">Número de jogadores</string>
+    <string name="round_number">Número de rondas</string>
+    <string name="create">Criar</string>
+    <string name="new_challenge">Novo Desafio</string>
 </resources>

@@ -54,4 +54,8 @@
     <string name="list_menu_update_label">Refresh</string>
     <string name="error_getting_list">Could not fetch challenges list</string>
     <string name="error_accepting_challenge">Could not accept challenge</string>
+    <string name="max_players">Max Players</string>
+    <string name="round_number">Round Number</string>
+    <string name="create">Create</string>
+    <string name="new_challenge">New Challenge</string>
 </resources>

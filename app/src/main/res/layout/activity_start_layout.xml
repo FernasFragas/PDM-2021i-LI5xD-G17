@@ -137,7 +137,7 @@
         android:layout_width="195dp"
         android:layout_height="151dp"
         android:layout_marginBottom="52dp"
-        app:layout_constraintBottom_toTopOf="@+id/word"
+        app:layout_constraintBottom_toTopOf="@+id/name"
         app:layout_constraintEnd_toStartOf="@+id/textView"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -155,11 +155,11 @@
         android:text="@string/options"
         android:textColor="@color/purple_200"
         android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/word"
+        app:layout_constraintBottom_toTopOf="@+id/name"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/word"
+        android:id="@+id/name"
         android:layout_width="287dp"
         android:layout_height="70dp"
         android:ems="10"

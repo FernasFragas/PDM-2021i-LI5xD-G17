@@ -53,7 +53,7 @@ class StartActivity : AppCompatActivity() {
         }
 
         binding.start.setOnClickListener {
-            model.word = word.text.toString()
+            model.word = name.text.toString()
             val intent = Intent(this, DrawActivity::class.java).apply {
                 putExtra(Keys.PLAYER_COUNT_KEY.name, model.playerCount)
                 putExtra(Keys.ROUND_COUNT_KEY.name, model.roundCount)

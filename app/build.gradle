@@ -8,6 +8,7 @@ plugins {
 
 android {
     compileSdkVersion 30
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "pt.isel.pdm.drag"
@@ -55,9 +56,13 @@ dependencies {
 
     kapt "androidx.room:room-compiler:$room_version"
 
+
+
     implementation platform('com.google.firebase:firebase-bom:26.1.1')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-firestore:22.0.0'
+
+
 
     implementation 'com.fasterxml.jackson.core:jackson-core:2.10.0'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.10.0'

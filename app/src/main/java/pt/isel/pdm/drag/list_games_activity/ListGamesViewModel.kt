@@ -7,22 +7,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.android.parcel.Parcelize
+import pt.isel.pdm.drag.R
+import pt.isel.pdm.drag.utils.ChallengeInfo
+import pt.isel.pdm.drag.utils.data.DragApplication
 import java.lang.Exception
-
-
-/**
- * The challenge information.
- *
- * @property [id]                   the challenge identifier
- * @property [challengerName]       the challenger name
- * @property [challengerMessage]    the challenger message
- */
-@Parcelize
-data class ChallengeInfo(
-    val id: String,
-    val challengerName: String,
-    val challengerMessage: String
-) : Parcelable
 
 enum class State { IDLE, ONGOING, COMPLETE }
 
@@ -45,15 +33,15 @@ class ListGamesViewModel(app: Application) : AndroidViewModel(app) {
     val challenges: LiveData<List<ChallengeInfo>> = MutableLiveData()
 
 
-    /*
-    private val app = getApplication<TicTacToeApplication>()
+
+    private val app = getApplication<DragApplication>()
 
     /**
      * Gets the challenges list by fetching them from the server. The operation's result is exposed
      * through [challenges]
      */
     fun fetchChallenges() {
-        app.repository.fetchChallenges(
+        app.cloudRepository.fetchChallenges(
             onSuccess = {
                 (challenges as MutableLiveData<List<ChallengeInfo>>).value = it
             },
@@ -70,13 +58,12 @@ class ListGamesViewModel(app: Application) : AndroidViewModel(app) {
     fun tryAcceptChallenge(challengeInfo: ChallengeInfo) {
         val state = enrolmentResult as MutableLiveData<Result<ChallengeInfo, Exception>>
         state.value = Result(State.ONGOING, challengeInfo)
-        app.repository.unpublishChallenge(
-            challengeInfo.id,
+        app.cloudRepository.addPlayer(
+                challengeInfo,
             { state.value = Result(State.COMPLETE, challengeInfo) },
             { error -> state.value = Result(State.COMPLETE, challengeInfo, error) }
         )
     }
-     */
 
     /**
      * Resets the state of the enrolment

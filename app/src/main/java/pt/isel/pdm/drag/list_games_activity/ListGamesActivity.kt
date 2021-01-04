@@ -1,19 +1,19 @@
 package pt.isel.pdm.drag.list_games_activity
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import pt.isel.pdm.drag.R
+import pt.isel.pdm.drag.addNewGameActivity.AddGameActivity
 import pt.isel.pdm.drag.databinding.ActivityListGamesLayoutBinding
 import pt.isel.pdm.drag.list_games_activity.view.ChallengesListAdapter
+import pt.isel.pdm.drag.utils.ChallengeInfo
 
 
 private const val CREATE_CODE = 10001
@@ -22,7 +22,7 @@ class ListGamesActivity : AppCompatActivity(){
 
     private fun updateChallengesList() {
         binding.refreshLayout.isRefreshing = true
-        //viewModel.fetchChallenges()
+        viewModel.fetchChallenges()
     }
 
     /**
@@ -32,16 +32,12 @@ class ListGamesActivity : AppCompatActivity(){
      * @param challenge the selected challenge
      */
     private fun challengeSelected(challenge: ChallengeInfo) {
-        /*
-        TODO falta fazer o viewModel.tryAcceptChallenge (acesso ao repo)
         AlertDialog.Builder(this)
-            .setTitle(getString(R.string.accept_challenge_dialog_title, challenge.challengerName))
+            .setTitle(getString(R.string.accept_challenge_dialog_title, challenge.id))
             .setPositiveButton(R.string.accept_challenge_dialog_ok) { _, _ -> viewModel.tryAcceptChallenge(challenge) }
             .setNegativeButton(R.string.accept_challenge_dialog_cancel, null)
             .create()
             .show()
-
-         */
     }
 
 
@@ -70,13 +66,9 @@ class ListGamesActivity : AppCompatActivity(){
         }
 
         binding.createChallengeButton.setOnClickListener {
-            /*
-            //TODO lançar o challenge
-            startActivityForResult(Intent(this, CreateChallengeActivity::class.java),
+            startActivityForResult(Intent(this, AddGameActivity::class.java),
                     CREATE_CODE
             )
-
-             */
         }
 
         viewModel.enrolmentResult.observe(this) {

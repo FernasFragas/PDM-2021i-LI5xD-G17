@@ -22,10 +22,13 @@ class AddGameViewModel(application: Application) : AndroidViewModel(application)
     /**
      * Creates a challenge with the given arguments. The result is placed in [result]
      */
-    fun createChallenge(gameName: String, playersNumb: Int) {
+    fun createChallenge(gameName: String, playersCapacity: Int, roundNumber: Int) {
         val app = getApplication<DragApplication>()
         val mutableResult = result as MutableLiveData<Result<ChallengeInfo, Exception>>
-        app.cloudRepository.publishChallenge(gameName, playersNumb,
+        app.cloudRepository.publishChallenge(
+                gameName = gameName,
+                playersCapacity = playersCapacity,
+                roundNumber = roundNumber,
                 onSuccess = { mutableResult.value = Result(State.COMPLETE, result = it) },
                 onError = { mutableResult.value = Result(State.COMPLETE, error = it) }
         )

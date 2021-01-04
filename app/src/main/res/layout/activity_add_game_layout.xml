@@ -8,55 +8,59 @@
     tools:context=".addNewGameActivity.AddGameActivity">
 
     <EditText
-        android:id="@+id/word"
+        android:id="@+id/name"
         android:layout_width="287dp"
         android:layout_height="70dp"
+        android:layout_marginTop="96dp"
         android:ems="10"
         android:gravity="center"
         android:inputType="textPersonName"
-        android:text="@string/create_challenge_challenges_name"
-        app:layout_constraintBottom_toTopOf="@+id/playerCount"
+        android:hint="@string/create_challenge_challenges_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addPlayer"
-        android:layout_width="58dp"
-        android:layout_height="54dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_exposure_plus_1_24" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/removePlayer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.395"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_exposure_neg_1_24" />
+        android:importantForAutofill="no" />
 
-    <TextView
-        android:id="@+id/playerCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/addPlayer"
-        app:layout_constraintStart_toEndOf="@+id/removePlayer"
-        app:layout_constraintTop_toTopOf="parent" />
+    <EditText
+        android:id="@+id/playerNumber"
+        android:layout_width="287dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:hint="@string/max_players"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.395"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name"
+        android:importantForAutofill="no" />
+
+    <EditText
+        android:id="@+id/roundNumber"
+        android:layout_width="287dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="numberDecimal"
+        android:hint="@string/round_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.395"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerNumber"
+        android:importantForAutofill="no" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/createButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="@string/create"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.455"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerCount" />
+        app:layout_constraintTop_toBottomOf="@+id/roundNumber"
+        app:layout_constraintVertical_bias="0.802" />
 </androidx.constraintlayout.widget.ConstraintLayout>

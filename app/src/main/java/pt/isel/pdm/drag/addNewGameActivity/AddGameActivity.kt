@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_add_game_layout.*
 import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityAddGameLayoutBinding
 import pt.isel.pdm.drag.utils.State
@@ -47,6 +48,14 @@ class AddGameActivity : AppCompatActivity() {
                     Toast.makeText(this, R.string.error_creating_challenge, Toast.LENGTH_LONG).show()
                 }
             }
+        }
+
+        binding.createButton.setOnClickListener {
+            viewModel.createChallenge(
+                    binding.name.text.toString(),
+                    Integer.parseInt(binding.playerNumber.text.toString()),
+                    Integer.parseInt(binding.roundNumber.text.toString())
+            )
         }
 
 
