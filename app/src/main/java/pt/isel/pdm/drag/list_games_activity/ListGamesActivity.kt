@@ -4,16 +4,21 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.addNewGameActivity.AddGameActivity
+import pt.isel.pdm.drag.addNewGameActivity.RESULT_EXTRA
 import pt.isel.pdm.drag.databinding.ActivityListGamesLayoutBinding
+import pt.isel.pdm.drag.draw_activity.local_Draw_Activity.DrawActivity
 import pt.isel.pdm.drag.list_games_activity.view.ChallengesListAdapter
 import pt.isel.pdm.drag.utils.ChallengeInfo
+import pt.isel.pdm.drag.utils.Keys
 
 
 private const val CREATE_CODE = 10001
@@ -79,21 +84,12 @@ class ListGamesActivity : AppCompatActivity(){
 
             if (it.state == State.COMPLETE) {
                 if (it.result != null) {
-                    /*
-                    TODO lançar a atividade do jogo se possivel
-                    startActivity(Intent(this, GameActivity::class.java).apply {
-                        putExtra(ACCEPTED_CHALLENGE_EXTRA, it.result)
-                        putExtra(LOCAL_PLAYER_EXTRA, Player.P1 as Parcelable)
-                        putExtra(TURN_PLAYER_EXTRA, Player.P1 as Parcelable)
+                    startActivity(Intent(this, DrawActivity::class.java).apply {
+                        putExtra(Keys.CHALLENGE_INFO.name, it.result)
+                        putExtra(Keys.GAME_WORD_KEY.name, "ONLINE")
                     })
-
-                     */
                 } else {
-                    /*
-                    TODO ERRO AO LANÇAR ATIVIDADE DO JOGO
                     Toast.makeText(this, R.string.error_accepting_challenge, Toast.LENGTH_LONG).show()
-
-                     */
                 }
                 viewModel.resetEnrolmentResult()
                 binding.challengesList.isEnabled = true
@@ -132,16 +128,12 @@ class ListGamesActivity : AppCompatActivity(){
         when (requestCode) {
             CREATE_CODE -> if (resultCode == Activity.RESULT_OK) {
                 updateChallengesList()
-                /*
-                //TODO NÃO TENHO A CERTEZA
                 val createdChallenge = data?.getParcelableExtra<ChallengeInfo>(RESULT_EXTRA)
-                startActivity(Intent(this, GameActivity::class.java).apply {
-                    putExtra(ACCEPTED_CHALLENGE_EXTRA, createdChallenge)
-                    putExtra(LOCAL_PLAYER_EXTRA, Player.P2 as Parcelable)
-                    putExtra(TURN_PLAYER_EXTRA, Player.P1 as Parcelable)
+                startActivity(Intent(this, DrawActivity::class.java).apply {
+                    putExtra(Keys.CHALLENGE_INFO.name, createdChallenge)
+                    putExtra(Keys.GAME_WORD_KEY.name, "ONLINE")
                 })
 
-                 */
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
         }

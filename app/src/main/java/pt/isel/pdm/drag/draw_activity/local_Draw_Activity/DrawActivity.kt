@@ -7,6 +7,8 @@ import android.view.MotionEvent.*
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import pt.isel.pdm.drag.utils.Keys
 import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityDrawBinding
@@ -14,6 +16,7 @@ import pt.isel.pdm.drag.draw_activity.DragViewModel
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
 import pt.isel.pdm.drag.showActivity.ShowActivity
+import pt.isel.pdm.drag.utils.ChallengeInfo
 
 /**
  * Activity referent for drawing
@@ -26,16 +29,35 @@ class DrawActivity : AppCompatActivity() {
      * para tal usamos a forma lazy
      */
     private val binding: ActivityDrawBinding by lazy { ActivityDrawBinding.inflate(layoutInflater) }
-    private val viewModel: DragViewModel by viewModels()
+
+    private val viewModel: DragViewModel by viewModels {
+        @Suppress("UNCHECKED_CAST")
+        object: ViewModelProvider.Factory {
+            override fun <VM : ViewModel?> create(modelClass: Class<VM>): VM {
+                return DragViewModel(application, challenge) as VM
+            }
+        }
+    }
+    //private val viewModel: DragViewModel by viewModels()
+
+    private val challenge: ChallengeInfo by lazy {
+        intent.getParcelableExtra<ChallengeInfo>(Keys.CHALLENGE_INFO.name) ?:
+        throw IllegalArgumentException("Mandatory extra ${Keys.CHALLENGE_INFO.name} not present")
+    }
+
+    private val isOnline: Boolean by lazy {
+        challenge.playerNum != (-1).toLong()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root) //O PRIMEIRO ACESSO, Á DELEGATED PROPRIETIE É FEITO AQUI
-
+        /*
         val playerCount = intent.getIntExtra(Keys.PLAYER_COUNT_KEY.name, 0)
         val roundCount = intent.getIntExtra(Keys.ROUND_COUNT_KEY.name, 0)
+         */
 
-        viewModel.startGame(playerCount, roundCount)
+        viewModel.startGame(challenge.playerCapacity.toInt(), challenge.roundNum.toInt())
         viewModel.initialWord(intent.getStringExtra(Keys.GAME_WORD_KEY.name).toString())
 
         prepareListeners()
@@ -47,6 +69,7 @@ class DrawActivity : AppCompatActivity() {
                 State.FINISH_SCREEN -> finishState()
                 State.NEW_ROUND -> newRoundState()
                 State.CHANGE_ACTIVITY -> changeActivity()
+                State.WAITING -> waitingForPlayersState()
             }
             /*
             if(viewModel.game.value?.round == State.NEW_ROUND)
@@ -97,17 +120,26 @@ class DrawActivity : AppCompatActivity() {
         binding.submitButton.visibility = View.VISIBLE
     }
 
-    /**
-     * logica do estado newState
-     */
-    private fun newRoundState() {
+    //função para escrever uma mensagem no meio do ecrã do jogo
+    private fun writeMessage(message: String) {
         binding.divider2.visibility = View.GONE
         binding.userInput.visibility = View.GONE
         binding.hint.visibility = View.GONE
         binding.gameOver?.visibility = View.VISIBLE
         binding.submitButton.visibility = View.GONE
-        binding.gameOver?.text = "Round " + viewModel.game.value?.currentRoundNumber
+        binding.gameOver?.text = message
+    }
 
+    /**
+     * logica do estado newState
+     */
+    private fun newRoundState() {
+        writeMessage("Round " + viewModel.game.value?.currentRoundNumber)
+    }
+
+    // estado em que se está à espera dos adversários
+    private fun waitingForPlayersState() {
+        writeMessage("Waiting for Other Players to Join")
     }
 
     private fun finishState() {

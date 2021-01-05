@@ -11,6 +11,7 @@ import pt.isel.pdm.drag.utils.Keys
 import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityStartLayoutBinding
 import pt.isel.pdm.drag.draw_activity.local_Draw_Activity.DrawActivity
+import pt.isel.pdm.drag.utils.ChallengeInfo
 
 class StartActivity : AppCompatActivity() {
 
@@ -55,9 +56,19 @@ class StartActivity : AppCompatActivity() {
         binding.start.setOnClickListener {
             model.word = name.text.toString()
             val intent = Intent(this, DrawActivity::class.java).apply {
+                putExtra(Keys.CHALLENGE_INFO.name, ChallengeInfo(
+                        "",
+                        "",
+                        model.playerCount.toLong(),
+                        -1,
+                        model.roundCount.toLong())
+                )
+                /*
                 putExtra(Keys.PLAYER_COUNT_KEY.name, model.playerCount)
                 putExtra(Keys.ROUND_COUNT_KEY.name, model.roundCount)
                 putExtra(Keys.GAME_WORD_KEY.name, model.word)
+
+                 */
             }
             startActivity(intent)
         }

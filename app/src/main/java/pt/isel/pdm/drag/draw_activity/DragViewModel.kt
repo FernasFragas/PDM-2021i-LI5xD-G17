@@ -2,11 +2,13 @@ package pt.isel.pdm.drag.draw_activity
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import pt.isel.pdm.drag.draw_activity.model.DragGame
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
+import pt.isel.pdm.drag.utils.ChallengeInfo
 import pt.isel.pdm.drag.utils.Timers
 import pt.isel.pdm.drag.utils.data.DragApplication
 import pt.isel.pdm.drag.utils.runDelayed
@@ -21,45 +23,37 @@ import pt.isel.pdm.drag.utils.runDelayed
 
 private const val SAVED_STATE_KEY = "DragViewModel.SavedState"
 
-
+/*
 class DragViewModel(
         application: Application,
         private val savedState: SavedStateHandle,
 ): AndroidViewModel(application) {
+ */
+class DragViewModel(
+        application: Application,
+        challengeInfo: ChallengeInfo,
+): AndroidViewModel(application) {
 
+    val game: LiveData<DragGame> = MutableLiveData(DragGame())
+    private val subscription = getApplication<DragApplication>().cloudRepository.subscribeTo(
+            challengeInfo.id,
+            onSubscriptionError = { TODO() },
+            onStateChanged = {
+                (game as MutableLiveData<DragGame>).value = it
+            }
+    )
+
+
+    /*
     val game: MutableLiveData<DragGame> by lazy {
         MutableLiveData<DragGame>(savedState.get<DragGame>(SAVED_STATE_KEY) ?: DragGame())
     }
+     */
 
     val gameRepo by lazy {
         getApplication<DragApplication>().gameRepository
     }
-/*
-    val time: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>(0)
-    }
 
-    fun changeTimer(millis: Long) {
-        /*
-        if(time.value == false) {
-            runDelayed(millis) {
-                game.value?.timer = game.value?.timer!! + 1
-                time.value = true
-            }
-        } else { time.value = false }
-        */
-        /*
-        runDelayed(millis) {
-            game.value?.timer = game.value?.timer!! + 1
-            time.value = time.value!! + 1
-            savedState[SAVED_STATE_KEY] = game.value
-            changeTimer(millis)
-        }
-
-         */
-
-    }
-*/
     /**
      * passa os valores que vêm da startActivity, para a nossa representação logica do jogo
      * quando estamos a iniciar um novo jogo
@@ -69,8 +63,8 @@ class DragViewModel(
             game.value?.playersNum = playersNum
             game.value?.roundsNum = rounds
             game.value?.createDrawingContainer()
-            game.value = game.value
-            savedState[SAVED_STATE_KEY] = game.value
+            //game.value = game.value
+            //savedState[SAVED_STATE_KEY] = game.value
             setTimer()
         }
     }
@@ -124,9 +118,15 @@ class DragViewModel(
                 gameRepo.saveGame(game.value!!)     //save game in the dp of repository
                 game.value?.state = State.CHANGE_ACTIVITY
             }
+            State.WAITING -> {
+                //TODO VER SE TODOS OS JOGADORES ESTÃO PRONTOS
+
+                //game.value?.state = State.NEW_ROUND
+            }
+
         }
-        game.value = game.value
-        savedState[SAVED_STATE_KEY] = game.value
+        //game.value = game.value
+        //savedState[SAVED_STATE_KEY] = game.value
         setTimer()
     }
 
