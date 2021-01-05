@@ -11,6 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DRAG">
         <activity
+            android:name=".gameModeActvity.GameModeActivity"
+            android:theme="@style/Theme.DRAG.NoActionBar">
+        </activity>
+        <activity
             android:name=".startActivity.StartActivity"
             android:noHistory="true" >
         </activity>

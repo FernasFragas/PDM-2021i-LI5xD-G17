@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import pt.isel.pdm.drag.draw_activity.model.DragGame
+import pt.isel.pdm.drag.draw_activity.model.MyOnlineID
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
 import pt.isel.pdm.drag.utils.ChallengeInfo
@@ -31,7 +32,8 @@ class DragViewModel(
  */
 class DragViewModel(
         application: Application,
-        challengeInfo: ChallengeInfo,
+        val localPlayer: MyOnlineID,
+        val challengeInfo: ChallengeInfo,
 ): AndroidViewModel(application) {
 
     val game: LiveData<DragGame> = MutableLiveData(DragGame())
@@ -50,15 +52,36 @@ class DragViewModel(
     }
      */
 
+    /**
+     * representations of the game in the local repository
+     */
     val gameRepo by lazy {
         getApplication<DragApplication>().gameRepository
+    }
+
+    /**
+     * representations of the game in the cloud
+     */
+    val gameCloudRepo by lazy {
+        getApplication<DragApplication>().cloudRepository
+    }
+
+
+    fun updateCloudGame() {
+        gameCloudRepo.updateGameState(
+                game.value?: throw IllegalStateException(),
+                challengeInfo,
+                onSuccess = { (game as MutableLiveData<DragGame>).value = it},
+                onError = { TODO()}
+        )
     }
 
     /**
      * passa os valores que vêm da startActivity, para a nossa representação logica do jogo
      * quando estamos a iniciar um novo jogo
      */
-    fun startGame(playersNum: Int, rounds: Int) {
+    fun startGame(playersNum: Int, rounds: Int, gameMode: Boolean) {
+        game.value?.gameMode =gameMode      //define se o jogo é online ou offline
         if (game.value?.playersNum == 0) {
             game.value?.playersNum = playersNum
             game.value?.roundsNum = rounds
@@ -67,6 +90,7 @@ class DragViewModel(
             //savedState[SAVED_STATE_KEY] = game.value
             setTimer()
         }
+        updateCloudGame()
     }
 
     private fun setTimer() {
@@ -109,19 +133,25 @@ class DragViewModel(
                 updateGuessingState()
 
                 game.value?.addOriginalWord(word)
+                updateCloudGame()
 
             }
             State.NEW_ROUND -> {
                 game.value?.state = State.DRAWING
+                if(game.value?.gameMode!!) updateCloudGame()
             }
             State.FINISH_SCREEN -> {
                 gameRepo.saveGame(game.value!!)     //save game in the dp of repository
                 game.value?.state = State.CHANGE_ACTIVITY
+                if(game.value?.gameMode!!) updateCloudGame()
             }
             State.WAITING -> {
+                updateCloudGame()
+                if(!game.value?.gameMode!!)     //se o jogo for offline faz isto
+                    game.value?.state = State.NEW_ROUND
                 //TODO VER SE TODOS OS JOGADORES ESTÃO PRONTOS
+                //if(localPlayer.myId == game.value?.currentID)
 
-                //game.value?.state = State.NEW_ROUND
             }
 
         }

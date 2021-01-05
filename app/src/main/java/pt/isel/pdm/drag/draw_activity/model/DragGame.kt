@@ -7,10 +7,11 @@ data class GameDTO(
         var playersNum: Int = 0,
         var roundsNum: Int = 0,
         var allDraws: MutableList<Array<Player>> = mutableListOf(),
-        var currentRound: Array<Player> = Array(playersNum) { Player() }
+        var currentRound: Array<Player> = Array(playersNum) { Player() },
+        var currentID: Int = 0
 )
 
-fun GameDTO.toGame() = DragGame(playersNum, roundsNum, allDraws, currentRound)
+fun GameDTO.toGame() = DragGame(playersNum, roundsNum, allDraws, currentRound, currentID)
 
 /**
  * Aqui Implementamos com o pluggin do parcelize que nos permite criar uma representação externa do
@@ -21,26 +22,29 @@ fun GameDTO.toGame() = DragGame(playersNum, roundsNum, allDraws, currentRound)
 data class Player(var dragDraw : DragDraw = DragDraw(), var originalWord : String = "", var guessedWord : String = "") : Parcelable
 
 @Parcelize
-enum class State : Parcelable { GUESSING, DRAWING, FINISH_SCREEN, CHANGE_ACTIVITY, NEW_ROUND, WAITING }
+enum class State : Parcelable { GUESSING, DRAWING, FINISH_SCREEN, CHANGE_ACTIVITY,
+    NEW_ROUND, NOT_STARTED, WAITING }
 
 @Parcelize
 data class DragGame(var playersNum: Int = 0,
                     var roundsNum: Int = 0,
                     var allDraws: MutableList<Array<Player>> = mutableListOf(),
-                    var currentRound: Array<Player> = Array(playersNum) { Player() }
+                    var currentRound: Array<Player> = Array(playersNum) { Player() },
+                    var currentID: Int = 0
 ) : Parcelable{
 
-    var currentID = 0
+    //var currentID = 0
     var currentWord = ""
     var currentRoundNumber = 0
     var state = State.WAITING
     var round = State.NEW_ROUND
     var timer = 0
+    var gameMode: Boolean = false
 
     /**
      * Creates an external representation of the game
      */
-    fun toGameDTO() = GameDTO(playersNum, roundsNum, allDraws, currentRound)
+    fun toGameDTO() = GameDTO(playersNum, roundsNum, allDraws, currentRound, currentID)
 
     /**
      * Its created one per round, each round has one array with the size of the number of players

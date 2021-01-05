@@ -9,16 +9,11 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.android.parcel.Parcelize
 import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.utils.ChallengeInfo
+import pt.isel.pdm.drag.utils.Result
+import pt.isel.pdm.drag.utils.State
 import pt.isel.pdm.drag.utils.data.DragApplication
 import java.lang.Exception
 
-enum class State { IDLE, ONGOING, COMPLETE }
-
-data class Result<R, E>(
-    val state: State = State.IDLE,
-    val result: R? = null,
-    val error: E? = null
-)
 
 class ListGamesViewModel(app: Application) : AndroidViewModel(app) {
 

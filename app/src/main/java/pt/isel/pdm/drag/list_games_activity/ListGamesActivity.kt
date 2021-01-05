@@ -16,9 +16,12 @@ import pt.isel.pdm.drag.addNewGameActivity.AddGameActivity
 import pt.isel.pdm.drag.addNewGameActivity.RESULT_EXTRA
 import pt.isel.pdm.drag.databinding.ActivityListGamesLayoutBinding
 import pt.isel.pdm.drag.draw_activity.local_Draw_Activity.DrawActivity
+import pt.isel.pdm.drag.draw_activity.local_Draw_Activity.LOCAL_PLAYER_EXTRA_ID
+import pt.isel.pdm.drag.draw_activity.model.MyOnlineID
 import pt.isel.pdm.drag.list_games_activity.view.ChallengesListAdapter
 import pt.isel.pdm.drag.utils.ChallengeInfo
 import pt.isel.pdm.drag.utils.Keys
+import pt.isel.pdm.drag.utils.State
 
 
 private const val CREATE_CODE = 10001
@@ -87,6 +90,9 @@ class ListGamesActivity : AppCompatActivity(){
                     startActivity(Intent(this, DrawActivity::class.java).apply {
                         putExtra(Keys.CHALLENGE_INFO.name, it.result)
                         putExtra(Keys.GAME_WORD_KEY.name, "ONLINE")
+                        putExtra(Keys.GAME_MODE.name, true)
+                        //supostamente deve dar o ID novo ao jogador, por exemplo se for o segundo jogador a entrar o ID dele é 1 (começa no 0)
+                        putExtra(LOCAL_PLAYER_EXTRA_ID, MyOnlineID(it.result.playerNum.toInt()))
                     })
                 } else {
                     Toast.makeText(this, R.string.error_accepting_challenge, Toast.LENGTH_LONG).show()
@@ -132,6 +138,8 @@ class ListGamesActivity : AppCompatActivity(){
                 startActivity(Intent(this, DrawActivity::class.java).apply {
                     putExtra(Keys.CHALLENGE_INFO.name, createdChallenge)
                     putExtra(Keys.GAME_WORD_KEY.name, "ONLINE")
+                    putExtra(Keys.GAME_MODE.name, true)
+                    putExtra(LOCAL_PLAYER_EXTRA_ID, MyOnlineID(0))
                 })
 
             }

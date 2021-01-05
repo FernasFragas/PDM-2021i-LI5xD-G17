@@ -33,6 +33,10 @@
     <string name="drawing_word">Drawing word:</string>
     <string name="guessed_word">Guessed word:</string>
 
+    <!-- Game Mode -->
+    <string name="online">online</string>
+    <string name="offline">offline</string>
+
 
     <!-- Create challenge screen -->
     <string name="create_challenge_title">Create Challenge</string>

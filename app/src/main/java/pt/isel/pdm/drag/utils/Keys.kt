@@ -5,5 +5,7 @@ enum class Keys(val key : String){
     ROUND_COUNT_KEY("Round count"),
     GAME_WORD_KEY("Word Selected"),
     GAME_KEY("Game"),
-    CHALLENGE_INFO("Challenge Info")
+    CHALLENGE_INFO("Challenge Info"),
+    GAME_MODE("Game Mode (Offline/Online)"),
+    MY_ID("My ID")
 }

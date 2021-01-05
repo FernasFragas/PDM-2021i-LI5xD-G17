@@ -13,10 +13,16 @@ import pt.isel.pdm.drag.utils.Keys
 import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityDrawBinding
 import pt.isel.pdm.drag.draw_activity.DragViewModel
+import pt.isel.pdm.drag.draw_activity.model.MyOnlineID
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
 import pt.isel.pdm.drag.showActivity.ShowActivity
 import pt.isel.pdm.drag.utils.ChallengeInfo
+
+/**
+ * Key to be used when adding the [Player] instance that represents the local player
+ */
+const val LOCAL_PLAYER_EXTRA_ID = "GameActivity.LocalPlayerListenExtraID"
 
 /**
  * Activity referent for drawing
@@ -30,11 +36,17 @@ class DrawActivity : AppCompatActivity() {
      */
     private val binding: ActivityDrawBinding by lazy { ActivityDrawBinding.inflate(layoutInflater) }
 
+
+    private val localPlayer: MyOnlineID by lazy {
+        intent.getParcelableExtra<MyOnlineID>(LOCAL_PLAYER_EXTRA_ID) ?:
+        throw IllegalArgumentException("Mandatory extra $LOCAL_PLAYER_EXTRA_ID not present")
+    }
+
     private val viewModel: DragViewModel by viewModels {
         @Suppress("UNCHECKED_CAST")
         object: ViewModelProvider.Factory {
             override fun <VM : ViewModel?> create(modelClass: Class<VM>): VM {
-                return DragViewModel(application, challenge) as VM
+                return DragViewModel(application,localPlayer, challenge) as VM
             }
         }
     }
@@ -52,12 +64,14 @@ class DrawActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root) //O PRIMEIRO ACESSO, Á DELEGATED PROPRIETIE É FEITO AQUI
+
+        val gameMode: Boolean = intent.getBooleanExtra(Keys.GAME_MODE.name,false)
         /*
         val playerCount = intent.getIntExtra(Keys.PLAYER_COUNT_KEY.name, 0)
         val roundCount = intent.getIntExtra(Keys.ROUND_COUNT_KEY.name, 0)
          */
 
-        viewModel.startGame(challenge.playerCapacity.toInt(), challenge.roundNum.toInt())
+        viewModel.startGame(challenge.playerCapacity.toInt(), challenge.roundNum.toInt(),gameMode)
         viewModel.initialWord(intent.getStringExtra(Keys.GAME_WORD_KEY.name).toString())
 
         prepareListeners()
@@ -120,7 +134,10 @@ class DrawActivity : AppCompatActivity() {
         binding.submitButton.visibility = View.VISIBLE
     }
 
-    //função para escrever uma mensagem no meio do ecrã do jogo
+
+    /**
+     * função para escrever uma mensagem no meio do ecrã do jogo
+     */
     private fun writeMessage(message: String) {
         binding.divider2.visibility = View.GONE
         binding.userInput.visibility = View.GONE
@@ -128,6 +145,17 @@ class DrawActivity : AppCompatActivity() {
         binding.gameOver?.visibility = View.VISIBLE
         binding.submitButton.visibility = View.GONE
         binding.gameOver?.text = message
+    }
+
+    /**
+     * função para retirar mensagem do meio do ecrã do jogo
+     */
+    private fun closeWaitingMessage() {
+        binding.divider2.visibility = View.VISIBLE
+        binding.userInput.visibility = View.VISIBLE
+        binding.hint.visibility = View.VISIBLE
+        binding.gameOver?.visibility =  View.GONE
+        binding.submitButton.visibility = View.VISIBLE
     }
 
     /**
@@ -139,7 +167,22 @@ class DrawActivity : AppCompatActivity() {
 
     // estado em que se está à espera dos adversários
     private fun waitingForPlayersState() {
-        writeMessage("Waiting for Other Players to Join")
+        writeMessage("Waiting for Others Players")
+        if(viewModel.game.value?.gameMode!!) {
+            if (challenge.playerCapacity == challenge.playerNum) {  //verifica se já tem os jogadores necessarios para jogar
+                if (localPlayer.myId == viewModel.game.value?.currentID) {  //quando é a vez do jogador jogar
+                    binding.dragDrawView.isEnabled = true
+                    binding.submitButton.isEnabled = true
+                    binding.hint.isEnabled = true
+                    closeWaitingMessage()
+                } else {        //quando é outro que não ele a jogar
+                    binding.dragDrawView.isEnabled = false
+                    binding.submitButton.isEnabled = false
+                    binding.hint.isEnabled = false
+                    writeMessage("Waiting for Others Players")
+                }
+            }
+        }
     }
 
     private fun finishState() {
