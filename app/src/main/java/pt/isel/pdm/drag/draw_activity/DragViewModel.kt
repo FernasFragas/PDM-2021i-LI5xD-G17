@@ -34,7 +34,7 @@ class DragViewModel(
 class DragViewModel(
         application: Application,
         val localPlayer: MyOnlineID,
-        val challengeInfo: ChallengeInfo,
+        val challengeInfo: ChallengeInfo
 ): AndroidViewModel(application) {
 
     val game: LiveData<DragGame> = MutableLiveData(DragGame())
@@ -57,6 +57,11 @@ class DragViewModel(
         MutableLiveData<DragGame>(savedState.get<DragGame>(SAVED_STATE_KEY) ?: DragGame())
     }
      */
+/*
+    /**fica com o estado passado antes do jogador**/
+    val myState: MutableLiveData<State> by lazy {
+        MutableLiveData<State>(savedState.get<State>(SAVED_STATE_KEY) ?: State.WAITING)
+    }*/
 
     /**
      * representations of the game in the local repository
@@ -122,12 +127,19 @@ class DragViewModel(
         }
     }
 
+
+
     /**
      * verifica se é para desenhar ou advinhar
      */
     fun changeState() {
         when (game.value?.state) {
-            State.DRAWING -> game.value?.state = State.GUESSING
+            State.DRAWING -> {
+                //myState.value = game.value?.state
+                game.value?.state = State.WAITING
+            }
+
+
             State.GUESSING -> {
                 var word = getGuess()
                 if (word == "") {
@@ -150,15 +162,24 @@ class DragViewModel(
                 game.value?.state = State.CHANGE_ACTIVITY
             }
             State.WAITING -> {
+                updateCloudGame()
                 /*
                 if(!game.value?.gameMode!!)     //se o jogo for offline faz isto
                     game.value?.state = State.NEW_ROUND
 
-                 */
-                //if(localPlayer.myId == game.value?.currentID)
 
+                if(localPlayer.myId == game.value?.currentID) {
+                    when (myState.value) {
+                        State.DRAWING -> State.GUESSING
+                        State.GUESSING -> State.DRAWING
+                    }
+
+                }
+
+            }*/
+                //State.NOT_STARTED -> {
                 game.value?.state = State.NEW_ROUND
-
+                //}
             }
 
         }
@@ -180,7 +201,7 @@ class DragViewModel(
             else
                 game.value?.state = State.NEW_ROUND
         } else
-            game.value?.state = State.DRAWING
+            game.value?.state = State.WAITING   //aqui
     }
 
 
