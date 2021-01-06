@@ -8,10 +8,11 @@ data class GameDTO(
         var roundsNum: Int = 0,
         var allDraws: MutableList<Array<Player>> = mutableListOf(),
         var currentRound: Array<Player> = Array(playersNum) { Player() },
-        var currentID: Int = 0
+        var currentID: Int = 0,
+        var state: State = State.WAITING
 )
 
-fun GameDTO.toGame() = DragGame(playersNum, roundsNum, allDraws, currentRound, currentID)
+fun GameDTO.toGame() = DragGame(playersNum, roundsNum, allDraws, currentRound, currentID, state)
 
 /**
  * Aqui Implementamos com o pluggin do parcelize que nos permite criar uma representação externa do
@@ -23,20 +24,21 @@ data class Player(var dragDraw : DragDraw = DragDraw(), var originalWord : Strin
 
 @Parcelize
 enum class State : Parcelable { GUESSING, DRAWING, FINISH_SCREEN, CHANGE_ACTIVITY,
-    NEW_ROUND, NOT_STARTED, WAITING }
+    NEW_ROUND, WAITING }
 
 @Parcelize
 data class DragGame(var playersNum: Int = 0,
                     var roundsNum: Int = 0,
                     var allDraws: MutableList<Array<Player>> = mutableListOf(),
                     var currentRound: Array<Player> = Array(playersNum) { Player() },
-                    var currentID: Int = 0
+                    var currentID: Int = 0,
+                    var state: State = State.WAITING
 ) : Parcelable{
 
     //var currentID = 0
     var currentWord = ""
     var currentRoundNumber = 0
-    var state = State.NOT_STARTED
+    //var state = State.WAITING
     var round = State.NEW_ROUND
     var timer = 0
     var gameMode: Boolean = false
@@ -44,7 +46,7 @@ data class DragGame(var playersNum: Int = 0,
     /**
      * Creates an external representation of the game
      */
-    fun toGameDTO() = GameDTO(playersNum, roundsNum, allDraws, currentRound, currentID)
+    fun toGameDTO() = GameDTO(playersNum, roundsNum, allDraws, currentRound, currentID, state)
 
     /**
      * Its created one per round, each round has one array with the size of the number of players

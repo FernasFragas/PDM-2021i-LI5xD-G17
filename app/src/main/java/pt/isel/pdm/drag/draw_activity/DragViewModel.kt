@@ -99,9 +99,9 @@ class DragViewModel(
             game.value?.createDrawingContainer()
             //game.value = game.value
             //savedState[SAVED_STATE_KEY] = game.value
-            updateCloudGame()
             setTimer()
         }
+        game.value?.state = State.DRAWING
         changeState()
     }
 
@@ -133,10 +133,11 @@ class DragViewModel(
      * verifica se é para desenhar ou advinhar
      */
     fun changeState() {
+        updateCloudGame()
         when (game.value?.state) {
             State.DRAWING -> {
                 //myState.value = game.value?.state
-                game.value?.state = State.WAITING
+                game.value?.state = State.GUESSING
             }
 
 
@@ -162,7 +163,6 @@ class DragViewModel(
                 game.value?.state = State.CHANGE_ACTIVITY
             }
             State.WAITING -> {
-                updateCloudGame()
                 /*
                 if(!game.value?.gameMode!!)     //se o jogo for offline faz isto
                     game.value?.state = State.NEW_ROUND
@@ -178,14 +178,13 @@ class DragViewModel(
 
             }*/
                 //State.NOT_STARTED -> {
-                game.value?.state = State.NEW_ROUND
+                game.value?.state = State.DRAWING
                 //}
             }
 
         }
 
         //if(game.value?.gameMode!!)
-        updateCloudGame()
         //game.value = game.value
         //savedState[SAVED_STATE_KEY] = game.value
         setTimer()
@@ -201,7 +200,7 @@ class DragViewModel(
             else
                 game.value?.state = State.NEW_ROUND
         } else
-            game.value?.state = State.WAITING   //aqui
+            game.value?.state = State.DRAWING   //aqui
     }
 
 
