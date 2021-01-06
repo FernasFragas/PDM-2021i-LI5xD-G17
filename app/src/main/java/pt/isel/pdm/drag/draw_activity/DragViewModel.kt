@@ -1,6 +1,7 @@
 package pt.isel.pdm.drag.draw_activity
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -45,6 +46,11 @@ class DragViewModel(
             }
     )
 
+    override fun onCleared() {
+        super.onCleared()
+        subscription.remove()
+    }
+
 
     /*
     val game: MutableLiveData<DragGame> by lazy {
@@ -88,9 +94,10 @@ class DragViewModel(
             game.value?.createDrawingContainer()
             //game.value = game.value
             //savedState[SAVED_STATE_KEY] = game.value
+            updateCloudGame()
             setTimer()
         }
-        updateCloudGame()
+        changeState()
     }
 
     private fun setTimer() {
@@ -133,28 +140,31 @@ class DragViewModel(
                 updateGuessingState()
 
                 game.value?.addOriginalWord(word)
-                updateCloudGame()
 
             }
             State.NEW_ROUND -> {
                 game.value?.state = State.DRAWING
-                if(game.value?.gameMode!!) updateCloudGame()
             }
             State.FINISH_SCREEN -> {
                 gameRepo.saveGame(game.value!!)     //save game in the dp of repository
                 game.value?.state = State.CHANGE_ACTIVITY
-                if(game.value?.gameMode!!) updateCloudGame()
             }
             State.WAITING -> {
-                updateCloudGame()
+                /*
                 if(!game.value?.gameMode!!)     //se o jogo for offline faz isto
                     game.value?.state = State.NEW_ROUND
-                //TODO VER SE TODOS OS JOGADORES ESTÃO PRONTOS
+
+                 */
                 //if(localPlayer.myId == game.value?.currentID)
+
+                game.value?.state = State.NEW_ROUND
 
             }
 
         }
+
+        //if(game.value?.gameMode!!)
+        updateCloudGame()
         //game.value = game.value
         //savedState[SAVED_STATE_KEY] = game.value
         setTimer()
@@ -172,6 +182,10 @@ class DragViewModel(
         } else
             game.value?.state = State.DRAWING
     }
+
+
+
+
 
     /**
      * incrementa o id do player
