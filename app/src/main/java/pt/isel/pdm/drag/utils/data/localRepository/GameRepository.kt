@@ -2,6 +2,7 @@ package pt.isel.pdm.drag.utils.data.localRepository
 
 import android.content.SharedPreferences
 import pt.isel.pdm.drag.draw_activity.model.DragGame
+import pt.isel.pdm.drag.draw_activity.model.State
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
@@ -10,7 +11,8 @@ import java.util.concurrent.Executors
  */
 private const val NUMBER_OF_PLAYERS = "NumberOfPlayers"
 private const val NUMBER_OF_ROUNDS = "NumberOfPRounds"
-
+private const val MY_CURRENT_STATE = "currentState"
+private const val MY_LOCAL_ID = "localID"
 /**
  *
  * App repository contains information about the game
@@ -55,6 +57,31 @@ class GameRepository (
             sharedPreferences
                     .edit()
                     .putInt(NUMBER_OF_ROUNDS,value)
+                    .apply()
+        }
+
+    /**
+     * last state before waiting, guarda o valor ordinal do estado que corresponde à sua posição no enum
+     */
+    var myState: Int
+        get() = sharedPreferences.getInt(MY_CURRENT_STATE,1)
+        set(value) {
+            sharedPreferences
+                    .edit()
+                    .putInt(MY_CURRENT_STATE,value)
+                    .apply()
+        }
+
+
+    /**
+     * last state before waiting, guarda o valor ordinal do estado que corresponde à sua posição no enum
+     */
+    var localID: Int
+        get() = sharedPreferences.getInt(MY_LOCAL_ID,0)
+        set(value) {
+            sharedPreferences
+                    .edit()
+                    .putInt(MY_LOCAL_ID,value)
                     .apply()
         }
 
