@@ -85,7 +85,6 @@ class DrawActivity : AppCompatActivity() {
                 State.NEW_ROUND -> newRoundState()
                 State.CHANGE_ACTIVITY -> changeActivity()
                 State.WAITING -> waitingForPlayersState()
-                State.NOT_STARTED -> waitingForPlayersState()
             }
             /*
             if(viewModel.game.value?.round == State.NEW_ROUND)
