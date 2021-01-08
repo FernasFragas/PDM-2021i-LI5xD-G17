@@ -40,13 +40,15 @@ class DragViewModel(
 ): AndroidViewModel(application) {
 
     val game: LiveData<DragGame> = MutableLiveData(DragGame())
-    private val subscription = getApplication<DragApplication>().cloudRepository.subscribeTo(
+    private val subscription by lazy {
+        getApplication<DragApplication>().cloudRepository.subscribeTo(
             challengeInfo.id,
             onSubscriptionError = { TODO() },
             onStateChanged = {
                 (game as MutableLiveData<DragGame>).value = it
             }
     )
+}
 
     override fun onCleared() {
         super.onCleared()
@@ -137,6 +139,7 @@ class DragViewModel(
      */
     fun changeState() {
         updateCloudGame()
+
         //se o jogo for online faz isto
         if (game.value?.gameMode!!) {
             //todo() logica dos jogo online

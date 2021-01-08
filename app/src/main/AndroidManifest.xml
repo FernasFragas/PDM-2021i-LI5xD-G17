@@ -13,6 +13,12 @@
         <activity
             android:name=".gameModeActvity.GameModeActivity"
             android:theme="@style/Theme.DRAG.NoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
         </activity>
         <activity
             android:name=".startActivity.StartActivity"
@@ -31,10 +37,6 @@
         <activity
             android:name=".list_games_activity.ListGamesActivity"
             android:theme="@style/Theme.DRAG.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".addNewGameActivity.AddGameActivity" />
     </application>

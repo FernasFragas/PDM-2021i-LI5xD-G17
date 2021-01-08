@@ -58,7 +58,7 @@ class DrawActivity : AppCompatActivity() {
         throw IllegalArgumentException("Mandatory extra ${Keys.CHALLENGE_INFO.name} not present")
     }
 
-    private val isOnline: Boolean by lazy {
+    public val isOnline: Boolean by lazy {
         challenge.playerNum != (-1).toLong()
     }
 
