@@ -208,5 +208,14 @@ class FirestoreRepository(private val mapper: ObjectMapper) {
                 .addOnFailureListener { onError(it) }
     }
 
+    /**
+     * delete the corresponding game from the cloud
+     */
+    fun deleteGame(challenge: ChallengeInfo) {
+        FirebaseFirestore.getInstance()
+                .collection(GAMES_COLLECTION)
+                .document(challenge.id)
+                .delete()
+    }
 
 }

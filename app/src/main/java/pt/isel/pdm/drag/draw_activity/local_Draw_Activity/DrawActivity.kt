@@ -16,6 +16,7 @@ import pt.isel.pdm.drag.draw_activity.DragViewModel
 import pt.isel.pdm.drag.draw_activity.model.MyOnlineID
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
+import pt.isel.pdm.drag.list_games_activity.ListGamesActivity
 import pt.isel.pdm.drag.showActivity.ShowActivity
 import pt.isel.pdm.drag.utils.ChallengeInfo
 
@@ -36,17 +37,17 @@ class DrawActivity : AppCompatActivity() {
      */
     private val binding: ActivityDrawBinding by lazy { ActivityDrawBinding.inflate(layoutInflater) }
 
-
+/*
     private val localPlayer: MyOnlineID by lazy {
         intent.getParcelableExtra<MyOnlineID>(LOCAL_PLAYER_EXTRA_ID) ?:
         throw IllegalArgumentException("Mandatory extra $LOCAL_PLAYER_EXTRA_ID not present")
     }
-
+*/
     private val viewModel: DragViewModel by viewModels {
         @Suppress("UNCHECKED_CAST")
         object: ViewModelProvider.Factory {
             override fun <VM : ViewModel?> create(modelClass: Class<VM>): VM {
-                return DragViewModel(application,localPlayer, challenge) as VM
+                return DragViewModel(application, challenge) as VM
             }
         }
     }
@@ -75,8 +76,23 @@ class DrawActivity : AppCompatActivity() {
 
          */
 
+        viewModel.gameRepo.localID = intent.getIntExtra(LOCAL_PLAYER_EXTRA_ID,0)
+
         prepareListeners()
 
+        if(viewModel.game.value?.gameMode!!) {
+            viewModel.game.observe(this) {
+                when (viewModel.gameRepo.myState) {
+                    State.DRAWING.ordinal -> drawOnGoing()
+                    State.GUESSING.ordinal -> guessState()
+                    State.FINISH_SCREEN.ordinal -> finishState()
+                    State.NEW_ROUND.ordinal -> newRoundState()
+                    State.CHANGE_ACTIVITY.ordinal -> changeActivity()
+                    State.WAITING.ordinal -> waitingForPlayersState()
+                }
+            }
+        }
+        else {
         viewModel.game.observe(this) {
             when (viewModel.game.value?.state) {
                 State.DRAWING -> drawOnGoing()
@@ -86,6 +102,9 @@ class DrawActivity : AppCompatActivity() {
                 State.CHANGE_ACTIVITY -> changeActivity()
                 State.WAITING -> waitingForPlayersState()
             }
+        }
+
+
             /*
             if(viewModel.game.value?.round == State.NEW_ROUND)
                 newRoundState()
@@ -163,7 +182,9 @@ class DrawActivity : AppCompatActivity() {
      * logica do estado newState
      */
     private fun newRoundState() {
+        binding.forfeitButton!!.visibility = View.GONE
         writeMessage("Round " + viewModel.game.value?.currentRoundNumber)
+        viewModel.changeState()
     }
 
     // estado em que se está à espera dos adversários
@@ -188,6 +209,7 @@ class DrawActivity : AppCompatActivity() {
 
              */
         }
+        else {viewModel.gameRepo.myState = State.WAITING.ordinal}
         /*
         if(viewModel.game.value?.gameMode!!) {
             if (challenge.playerCapacity == challenge.playerNum) {  //verifica se já tem os jogadores necessarios para jogar
@@ -230,6 +252,7 @@ class DrawActivity : AppCompatActivity() {
         //presentation()
         setDrawListener()
         setSubmitListener()
+        setForfeitListener()
     }
 
     /*
@@ -270,7 +293,17 @@ class DrawActivity : AppCompatActivity() {
         binding.submitButton.setOnClickListener {
             if (viewModel.game.value!!.state == State.GUESSING)
                 viewModel.addGuess(binding.userInput.editText?.text.toString())
+            waitingForPlayersState()
             viewModel.changeState()
+        }
+    }
+
+    //todo() melhor
+    private fun setForfeitListener() {
+        binding.forfeitButton!!.setOnClickListener {
+            challenge.playerNum = challenge.playerNum - 1
+            viewModel.updateCloudGame()
+            startActivity(Intent(this, ListGamesActivity::class.java))
         }
     }
 }

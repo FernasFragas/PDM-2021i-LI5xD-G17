@@ -11,9 +11,11 @@ import pt.isel.pdm.drag.draw_activity.model.MyOnlineID
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
 import pt.isel.pdm.drag.utils.ChallengeInfo
+import pt.isel.pdm.drag.utils.Result
 import pt.isel.pdm.drag.utils.Timers
 import pt.isel.pdm.drag.utils.data.DragApplication
 import pt.isel.pdm.drag.utils.runDelayed
+import java.lang.Exception
 
 
 /**
@@ -33,7 +35,7 @@ class DragViewModel(
  */
 class DragViewModel(
         application: Application,
-        val localPlayer: MyOnlineID,
+        //val localPlayer: MyOnlineID,
         val challengeInfo: ChallengeInfo
 ): AndroidViewModel(application) {
 
@@ -92,7 +94,7 @@ class DragViewModel(
      * quando estamos a iniciar um novo jogo
      */
     fun startGame(playersNum: Int, rounds: Int, gameMode: Boolean) {
-        game.value?.gameMode =gameMode      //define se o jogo é online ou offline
+        game.value?.gameMode = gameMode      //define se o jogo é online ou offline
         if (game.value?.playersNum == 0) {
             game.value?.playersNum = playersNum
             game.value?.roundsNum = rounds
@@ -101,7 +103,8 @@ class DragViewModel(
             //savedState[SAVED_STATE_KEY] = game.value
             setTimer()
         }
-        game.value?.state = State.DRAWING
+        game.value?.state = State.NEW_ROUND
+        gameRepo.myState = State.NEW_ROUND.ordinal
         changeState()
     }
 
@@ -134,54 +137,70 @@ class DragViewModel(
      */
     fun changeState() {
         updateCloudGame()
-        when (game.value?.state) {
-            State.DRAWING -> {
-                //myState.value = game.value?.state
-                game.value?.state = State.GUESSING
-            }
+        //se o jogo for online faz isto
+        if (game.value?.gameMode!!) {
+            //todo() logica dos jogo online
+            if (gameRepo.localID == game.value?.currentID) {
+                when (gameRepo.myState) {
+                    State.DRAWING.ordinal -> {
+                        gameRepo.myState = State.WAITING.ordinal
+                        game.value?.state = State.GUESSING
+                    }
+                    State.GUESSING.ordinal -> {
+                        gameRepo.myState = State.WAITING.ordinal
+                        game.value?.state = State.DRAWING
+                    }
+                    State.FINISH_SCREEN.ordinal -> {
+                        gameRepo.saveGame(game.value!!)     //save game in the dp of repository
+                        game.value?.state = State.CHANGE_ACTIVITY
+                        gameRepo.myState = State.CHANGE_ACTIVITY.ordinal
+                        updateCloudGame()
+                    }
+                    State.NEW_ROUND.ordinal -> {
+                        gameRepo.myState = State.DRAWING.ordinal
+                        game.value?.state = State.DRAWING
+                    }
+                    State.WAITING.ordinal -> {
+                        gameRepo.myState = game.value?.state!!.ordinal
+                    }
+                }
+            } else gameRepo.myState = State.WAITING.ordinal
+        }
 
+        else {
 
-            State.GUESSING -> {
-                var word = getGuess()
-                if (word == "") {
-                    word = "NO GUESS FOUND"
-                    game.value?.addGuessedWord(word)
+            when (game.value?.state) {
+                State.DRAWING -> {
+                    game.value?.state = State.GUESSING
                 }
 
-                addPlayerID()
 
-                updateGuessingState()
-
-                game.value?.addOriginalWord(word)
-
-            }
-            State.NEW_ROUND -> {
-                game.value?.state = State.DRAWING
-            }
-            State.FINISH_SCREEN -> {
-                gameRepo.saveGame(game.value!!)     //save game in the dp of repository
-                game.value?.state = State.CHANGE_ACTIVITY
-            }
-            State.WAITING -> {
-                /*
-                if(!game.value?.gameMode!!)     //se o jogo for offline faz isto
-                    game.value?.state = State.NEW_ROUND
-
-
-                if(localPlayer.myId == game.value?.currentID) {
-                    when (myState.value) {
-                        State.DRAWING -> State.GUESSING
-                        State.GUESSING -> State.DRAWING
+                State.GUESSING -> {
+                    var word = getGuess()
+                    if (word == "") {
+                        word = "NO GUESS FOUND"
+                        game.value?.addGuessedWord(word)
                     }
 
+                    addPlayerID()
+                    updateGuessingState()
+
+                    game.value?.addOriginalWord(word)
+
+                }
+                State.NEW_ROUND -> {
+                    game.value?.state = State.DRAWING
+                }
+                State.FINISH_SCREEN -> {
+                    gameRepo.saveGame(game.value!!)     //save game in the dp of repository
+                    game.value?.state = State.CHANGE_ACTIVITY
+                    updateCloudGame()
+                }
+                State.WAITING -> {
+                    game.value?.state = State.NEW_ROUND
                 }
 
-            }*/
-                //State.NOT_STARTED -> {
-                game.value?.state = State.DRAWING
-                //}
             }
-
         }
 
         //if(game.value?.gameMode!!)
@@ -199,13 +218,23 @@ class DragViewModel(
                 game.value?.state = State.FINISH_SCREEN
             else
                 game.value?.state = State.NEW_ROUND
-        } else
-            game.value?.state = State.DRAWING   //aqui
+        } else {
+            if(!game.value?.gameMode!!)
+                game.value?.state = State.GUESSING
+            else
+                game.value?.state = State.WAITING
+        }
     }
 
 
-
-
+    /**
+     * forfeits the game
+     */
+    fun forfeit() {
+        game.value?.state = State.FINISH_SCREEN
+        updateCloudGame()
+        gameCloudRepo.deleteGame(challengeInfo)
+    }
 
     /**
      * incrementa o id do player

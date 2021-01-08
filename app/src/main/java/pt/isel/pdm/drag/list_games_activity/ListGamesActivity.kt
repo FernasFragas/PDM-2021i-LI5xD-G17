@@ -92,7 +92,7 @@ class ListGamesActivity : AppCompatActivity(){
                         putExtra(Keys.GAME_WORD_KEY.name, "ONLINE")
                         putExtra(Keys.GAME_MODE.name, true)
                         //supostamente deve dar o ID novo ao jogador, por exemplo se for o segundo jogador a entrar o ID dele é 1 (começa no 0)
-                        putExtra(LOCAL_PLAYER_EXTRA_ID, MyOnlineID(it.result.playerNum.toInt()))
+                        putExtra(LOCAL_PLAYER_EXTRA_ID, it.result.playerNum.toInt()-1)
                     })
                 } else {
                     Toast.makeText(this, R.string.error_accepting_challenge, Toast.LENGTH_LONG).show()
@@ -139,7 +139,7 @@ class ListGamesActivity : AppCompatActivity(){
                     putExtra(Keys.CHALLENGE_INFO.name, createdChallenge)
                     putExtra(Keys.GAME_WORD_KEY.name, "ONLINE")
                     putExtra(Keys.GAME_MODE.name, true)
-                    putExtra(LOCAL_PLAYER_EXTRA_ID, MyOnlineID(0))
+                    putExtra(LOCAL_PLAYER_EXTRA_ID, 0)
                 })
 
             }
