@@ -96,17 +96,17 @@ class DragViewModel(
      * quando estamos a iniciar um novo jogo
      */
     fun startGame(playersNum: Int, rounds: Int, gameMode: Boolean) {
-        game.value?.gameMode = gameMode      //define se o jogo é online ou offline
+        //game.value?.gameMode = gameMode      //define se o jogo é online ou offline
         if (game.value?.playersNum == 0) {
             game.value?.playersNum = playersNum
             game.value?.roundsNum = rounds
             game.value?.createDrawingContainer()
             //game.value = game.value
             //savedState[SAVED_STATE_KEY] = game.value
-            setTimer()
+            //setTimer()
         }
         game.value?.state = State.NEW_ROUND
-        gameRepo.myState = State.NEW_ROUND.ordinal
+        setTimer()
         changeState()
     }
 
@@ -138,10 +138,10 @@ class DragViewModel(
      * verifica se é para desenhar ou advinhar
      */
     fun changeState() {
-        updateCloudGame()
 
         //se o jogo for online faz isto
         if (game.value?.gameMode!!) {
+            updateCloudGame()
             //todo() logica dos jogo online
             if (gameRepo.localID == game.value?.currentID) {
                 when (gameRepo.myState) {
@@ -167,14 +167,16 @@ class DragViewModel(
                         gameRepo.myState = game.value?.state!!.ordinal
                     }
                 }
-            } else gameRepo.myState = State.WAITING.ordinal
-        }
+            } else
+                gameRepo.myState = State.WAITING.ordinal
 
-        else {
-
+            updateCloudGame()
+        } else {
+        gameRepo.myState = game.value?.state!!.ordinal
             when (game.value?.state) {
                 State.DRAWING -> {
                     game.value?.state = State.GUESSING
+                    addPlayerID()
                 }
 
 
@@ -184,8 +186,8 @@ class DragViewModel(
                         word = "NO GUESS FOUND"
                         game.value?.addGuessedWord(word)
                     }
-
                     addPlayerID()
+
                     updateGuessingState()
 
                     game.value?.addOriginalWord(word)
@@ -204,12 +206,13 @@ class DragViewModel(
                 }
 
             }
+            setTimer()
         }
 
         //if(game.value?.gameMode!!)
         //game.value = game.value
         //savedState[SAVED_STATE_KEY] = game.value
-        setTimer()
+        //setTimer()
     }
 
     private fun isFinished() = game.value?.currentRoundNumber == game.value?.roundsNum
@@ -225,7 +228,7 @@ class DragViewModel(
             if(!game.value?.gameMode!!)
                 game.value?.state = State.GUESSING
             else
-                game.value?.state = State.WAITING
+                game.value?.state = State.DRAWING
         }
     }
 
@@ -290,5 +293,7 @@ class DragViewModel(
     fun getOriginalWord() = game.value?.getOriginal()
 
     fun getGuess() = game.value!!.getGuess()
+
+    fun setGameMode(mode: Boolean) {game.value?.gameMode = mode}
 
 }
