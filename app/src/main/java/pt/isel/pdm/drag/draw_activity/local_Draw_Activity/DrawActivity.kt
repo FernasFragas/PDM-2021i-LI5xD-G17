@@ -67,7 +67,6 @@ class DrawActivity : AppCompatActivity() {
         setContentView(binding.root) //O PRIMEIRO ACESSO, Á DELEGATED PROPRIETIE É FEITO AQUI
 
         /*
-        val gameMode: Boolean = intent.getBooleanExtra(Keys.GAME_MODE.name,false)
         val playerCount = intent.getIntExtra(Keys.PLAYER_COUNT_KEY.name, 0)
         val roundCount = intent.getIntExtra(Keys.ROUND_COUNT_KEY.name, 0)
 
@@ -75,20 +74,25 @@ class DrawActivity : AppCompatActivity() {
         viewModel.addOriginalWord(intent.getStringExtra(Keys.GAME_WORD_KEY.name).toString())
 
          */
-
+        viewModel.setGameMode(intent.getBooleanExtra(Keys.GAME_MODE.name,false))    //indico q o jogo é online
         viewModel.gameRepo.localID = intent.getIntExtra(LOCAL_PLAYER_EXTRA_ID,0)
 
         prepareListeners()
 
+        if (viewModel.game.value?.playersNum==0) {
+            viewModel.gameRepo.myState = State.WAITING.ordinal
+        }
+
         if(viewModel.game.value?.gameMode!!) {
             viewModel.game.observe(this) {
+                viewModel.gameRepo.myState = viewModel.game.value?.state!!.ordinal
                 when (viewModel.gameRepo.myState) {
                     State.DRAWING.ordinal -> drawOnGoing()
                     State.GUESSING.ordinal -> guessState()
-                    State.FINISH_SCREEN.ordinal -> finishState()
-                    State.NEW_ROUND.ordinal -> newRoundState()
-                    State.CHANGE_ACTIVITY.ordinal -> changeActivity()
                     State.WAITING.ordinal -> waitingForPlayersState()
+                    State.FINISH_SCREEN.ordinal -> finishState()
+                    State.CHANGE_ACTIVITY.ordinal -> changeActivity()
+                    State.NEW_ROUND.ordinal -> newRoundState()
                 }
             }
         }
@@ -132,6 +136,25 @@ class DrawActivity : AppCompatActivity() {
      *  adequa a activity á opção de quando é para desenhar
      */
     private fun drawOnGoing() {
+
+        if (challenge.playerCapacity.toInt() == viewModel.game.value?.playersNum) {
+            if (viewModel.gameRepo.localID == viewModel.game.value?.currentID) {  //quando é a vez do jogador jogar
+                closeWaitingMessage()
+                binding.divider2.visibility = View.VISIBLE
+                binding.dragDrawView.viewModel = viewModel
+                binding.userInput.visibility = View.GONE
+                binding.hint.visibility = View.VISIBLE
+                binding.gameOver?.visibility = View.GONE
+                binding.submitButton.visibility = View.VISIBLE
+                binding.hint.text = viewModel.getOriginalWord()
+                binding.userInput.editText?.setText("")
+                setDrawListener()
+            } else {        //quando é outro que não ele a jogar
+                writeMessage("Waiting for Others Players 2")
+            }
+            return
+        }
+
         binding.divider2.visibility = View.VISIBLE
         binding.dragDrawView.viewModel = viewModel
         binding.userInput.visibility = View.GONE
@@ -147,6 +170,21 @@ class DrawActivity : AppCompatActivity() {
      * adequa a activity á opção de quando é para adivinhar
      */
     private fun guessState() {
+
+        if (challenge.playerCapacity.toInt() == viewModel.game.value?.playersNum) {
+            if (viewModel.gameRepo.localID == viewModel.game.value?.currentID) {  //quando é a vez do jogador jogar
+                closeWaitingMessage()
+                binding.divider2.visibility = View.VISIBLE
+                binding.userInput.visibility = View.VISIBLE
+                binding.hint.visibility = View.GONE
+                binding.gameOver?.visibility = View.GONE
+                binding.submitButton.visibility = View.VISIBLE
+            } else {        //quando é outro que não ele a jogar
+                writeMessage("Waiting for Others Players 2")
+            }
+            return
+        }
+
         binding.divider2.visibility = View.VISIBLE
         binding.userInput.visibility = View.VISIBLE
         binding.hint.visibility = View.GONE
@@ -189,51 +227,13 @@ class DrawActivity : AppCompatActivity() {
 
     // estado em que se está à espera dos adversários
     private fun waitingForPlayersState() {
-        writeMessage("Waiting for Others Players")
-        if (challenge.playerCapacity == challenge.playerNum) {  //verifica se já tem os jogadores necessarios para jogar
-            val gameMode: Boolean = intent.getBooleanExtra(Keys.GAME_MODE.name,false)
+        writeMessage("Waiting for Others Players 1")
+        if (challenge.playerCapacity == challenge.playerNum && viewModel.game.value?.playersNum==0) {  //verifica se já tem os jogadores necessarios para jogar
+            val gameMode: Boolean = intent.getBooleanExtra(Keys.GAME_MODE.name, false)
             viewModel.startGame(challenge.playerCapacity.toInt(), challenge.roundNum.toInt(), gameMode)
             viewModel.initialWord(intent.getStringExtra(Keys.GAME_WORD_KEY.name).toString())
-            /*
-            if (localPlayer.myId == viewModel.game.value?.currentID) {  //quando é a vez do jogador jogar
-                binding.dragDrawView.isEnabled = true
-                binding.submitButton.isEnabled = true
-                binding.hint.isEnabled = true
-                closeWaitingMessage()
-            } else {        //quando é outro que não ele a jogar
-                binding.dragDrawView.isEnabled = false
-                binding.submitButton.isEnabled = false
-                binding.hint.isEnabled = false
-                writeMessage("Waiting for Others Players")
-            }
-
-             */
-        }
-        else {viewModel.gameRepo.myState = State.WAITING.ordinal}
-        /*
-        if(viewModel.game.value?.gameMode!!) {
-            if (challenge.playerCapacity == challenge.playerNum) {  //verifica se já tem os jogadores necessarios para jogar
-                val gameMode: Boolean = intent.getBooleanExtra(Keys.GAME_MODE.name,false)
-                viewModel.initialWord(intent.getStringExtra(Keys.GAME_WORD_KEY.name).toString())
-                viewModel.startGame(challenge.playerCapacity.toInt(), challenge.roundNum.toInt(), gameMode)
-                /*
-                if (localPlayer.myId == viewModel.game.value?.currentID) {  //quando é a vez do jogador jogar
-                    binding.dragDrawView.isEnabled = true
-                    binding.submitButton.isEnabled = true
-                    binding.hint.isEnabled = true
-                    closeWaitingMessage()
-                } else {        //quando é outro que não ele a jogar
-                    binding.dragDrawView.isEnabled = false
-                    binding.submitButton.isEnabled = false
-                    binding.hint.isEnabled = false
-                    writeMessage("Waiting for Others Players")
-                }
-
-                 */
-            }
         }
 
-         */
     }
 
     private fun finishState() {
@@ -293,7 +293,6 @@ class DrawActivity : AppCompatActivity() {
         binding.submitButton.setOnClickListener {
             if (viewModel.game.value!!.state == State.GUESSING)
                 viewModel.addGuess(binding.userInput.editText?.text.toString())
-            waitingForPlayersState()
             viewModel.changeState()
         }
     }
