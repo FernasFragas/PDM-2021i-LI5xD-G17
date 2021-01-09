@@ -13,6 +13,7 @@ import pt.isel.pdm.drag.utils.Keys
 import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityDrawBinding
 import pt.isel.pdm.drag.draw_activity.DragViewModel
+import pt.isel.pdm.drag.draw_activity.LocalDragViewModel
 import pt.isel.pdm.drag.draw_activity.model.MyOnlineID
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
@@ -51,21 +52,22 @@ class DrawActivity : AppCompatActivity() {
             }
         }
     }
-    //private val viewModel: DragViewModel by viewModels()
+
+    //private val localViewModel: LocalDragViewModel by viewModels()
 
     private val challenge: ChallengeInfo by lazy {
         intent.getParcelableExtra<ChallengeInfo>(Keys.CHALLENGE_INFO.name) ?:
         throw IllegalArgumentException("Mandatory extra ${Keys.CHALLENGE_INFO.name} not present")
     }
 
-    public val isOnline: Boolean by lazy {
+    val isOnline: Boolean by lazy {
         challenge.playerNum != (-1).toLong()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root) //O PRIMEIRO ACESSO, Á DELEGATED PROPRIETIE É FEITO AQUI
-
+/*
         if (!isOnline) {
             val playerCount = intent.getIntExtra(Keys.PLAYER_COUNT_KEY.name, 0)
             val roundCount = intent.getIntExtra(Keys.ROUND_COUNT_KEY.name, 0)
@@ -74,7 +76,7 @@ class DrawActivity : AppCompatActivity() {
             viewModel.addOriginalWord(intent.getStringExtra(Keys.GAME_WORD_KEY.name).toString())
 
             viewModel.gameRepo.myState = State.NEW_ROUND.ordinal
-        }
+        }*/
         /*
         val playerCount = intent.getIntExtra(Keys.PLAYER_COUNT_KEY.name, 0)
         val roundCount = intent.getIntExtra(Keys.ROUND_COUNT_KEY.name, 0)
@@ -85,7 +87,6 @@ class DrawActivity : AppCompatActivity() {
          */
         viewModel.setGameMode(intent.getBooleanExtra(Keys.GAME_MODE.name,false))    //indico q o jogo é online
         viewModel.gameRepo.localID = intent.getIntExtra(LOCAL_PLAYER_EXTRA_ID,0)
-
         prepareListeners()
 
         if (viewModel.game.value?.playersNum==0) {
@@ -94,6 +95,7 @@ class DrawActivity : AppCompatActivity() {
 
         if(viewModel.game.value?.gameMode!!) {
             viewModel.game.observe(this) {
+                binding.dragDrawView.viewModel = viewModel
                 viewModel.gameRepo.myState = viewModel.game.value?.state!!.ordinal
                 when (viewModel.gameRepo.myState) {
                     State.DRAWING.ordinal -> drawOnGoing()
@@ -106,16 +108,16 @@ class DrawActivity : AppCompatActivity() {
             }
         }
         else {
-        viewModel.game.observe(this) {
-            when (viewModel.game.value?.state) {
-                State.DRAWING -> drawOnGoing()
-                State.GUESSING -> guessState()
-                State.FINISH_SCREEN -> finishState()
-                State.NEW_ROUND -> newRoundState()
-                State.CHANGE_ACTIVITY -> changeActivity()
-                State.WAITING -> waitingForPlayersState()
+            viewModel.game.observe(this) {
+                when (viewModel.game.value?.state) {
+                    State.DRAWING -> drawOnGoing()
+                    State.GUESSING -> guessState()
+                    State.FINISH_SCREEN -> finishState()
+                    State.NEW_ROUND -> newRoundState()
+                    State.CHANGE_ACTIVITY -> changeActivity()
+                    State.WAITING -> waitingForPlayersState()
+                }
             }
-        }
 
 
             /*
@@ -149,6 +151,7 @@ class DrawActivity : AppCompatActivity() {
         if (challenge.playerCapacity.toInt() == viewModel.game.value?.playersNum) {
             if (viewModel.gameRepo.localID == viewModel.game.value?.currentID) {  //quando é a vez do jogador jogar
                 closeWaitingMessage()
+                binding.dragDrawView.visibility = View.VISIBLE
                 binding.divider2.visibility = View.VISIBLE
                 binding.dragDrawView.viewModel = viewModel
                 binding.userInput.visibility = View.GONE
@@ -159,6 +162,7 @@ class DrawActivity : AppCompatActivity() {
                 binding.userInput.editText?.setText("")
                 setDrawListener()
             } else {        //quando é outro que não ele a jogar
+                binding.dragDrawView.visibility = View.INVISIBLE
                 writeMessage("Waiting for Others Players 2")
             }
             return
@@ -183,12 +187,14 @@ class DrawActivity : AppCompatActivity() {
         if (challenge.playerCapacity.toInt() == viewModel.game.value?.playersNum) {
             if (viewModel.gameRepo.localID == viewModel.game.value?.currentID) {  //quando é a vez do jogador jogar
                 closeWaitingMessage()
+                binding.dragDrawView.visibility = View.VISIBLE
                 binding.divider2.visibility = View.VISIBLE
                 binding.userInput.visibility = View.VISIBLE
                 binding.hint.visibility = View.GONE
                 binding.gameOver?.visibility = View.GONE
                 binding.submitButton.visibility = View.VISIBLE
-            } else {        //quando é outro que não ele a jogar
+            } else { //quando é outro que não ele a jogar
+                binding.dragDrawView.visibility = View.INVISIBLE
                 writeMessage("Waiting for Others Players 2")
             }
             return
@@ -241,6 +247,7 @@ class DrawActivity : AppCompatActivity() {
             val gameMode: Boolean = intent.getBooleanExtra(Keys.GAME_MODE.name, false)
             viewModel.startGame(challenge.playerCapacity.toInt(), challenge.roundNum.toInt(), gameMode)
             viewModel.initialWord(intent.getStringExtra(Keys.GAME_WORD_KEY.name).toString())
+            viewModel.updateCloudGame()
         }
 
     }
@@ -302,6 +309,7 @@ class DrawActivity : AppCompatActivity() {
         binding.submitButton.setOnClickListener {
             if (viewModel.game.value!!.state == State.GUESSING)
                 viewModel.addGuess(binding.userInput.editText?.text.toString())
+            viewModel.updateCloudGame()
             viewModel.changeState()
         }
     }
