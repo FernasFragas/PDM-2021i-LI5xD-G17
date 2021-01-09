@@ -63,12 +63,12 @@ class StartActivity : AppCompatActivity() {
                         -1,
                         model.roundCount.toLong())
                 )
-                /*
+                putExtra(Keys.GAME_WORD_KEY.name, model.word)
+                putExtra(Keys.GAME_MODE.name, false)
+
                 putExtra(Keys.PLAYER_COUNT_KEY.name, model.playerCount)
                 putExtra(Keys.ROUND_COUNT_KEY.name, model.roundCount)
-                putExtra(Keys.GAME_WORD_KEY.name, model.word)
 
-                 */
             }
             startActivity(intent)
         }
