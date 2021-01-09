@@ -140,6 +140,7 @@ class DrawActivity : AppCompatActivity() {
         //viewModel.gameRepo.saveGame(viewModel.game.value!!)
         val intent = Intent(this, ShowActivity::class.java)
         intent.putExtra(Keys.GAME_KEY.name, viewModel.game.value!!)
+        intent.putExtra(Keys.CHALLENGE_INFO.name, challenge)
         startActivity(intent)
     }
 
@@ -237,6 +238,7 @@ class DrawActivity : AppCompatActivity() {
     private fun newRoundState() {
         binding.forfeitButton!!.visibility = View.GONE
         writeMessage("Round " + viewModel.game.value?.currentRoundNumber)
+        viewModel.setTimer()
         viewModel.changeState()
     }
 
@@ -259,6 +261,7 @@ class DrawActivity : AppCompatActivity() {
         binding.submitButton.visibility = View.GONE
         binding.gameOver?.visibility = View.VISIBLE
         binding.gameOver?.text = this.applicationContext.getText(R.string.Over)
+        viewModel.changeState()
     }
 
     /**

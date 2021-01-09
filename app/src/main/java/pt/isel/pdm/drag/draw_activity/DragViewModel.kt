@@ -104,11 +104,11 @@ class DragViewModel(
             //setTimer()
         }
         game.value?.state = State.NEW_ROUND
-        //setTimer()
+        setTimer()
         changeState()
     }
 
-    private fun setTimer() {
+    fun setTimer() {
         val roundBeforeTimer = game.value?.currentRoundNumber
         val idBeforeTimer = game.value?.currentID
         val stateBeforeTimer = game.value?.state
@@ -175,8 +175,8 @@ class DragViewModel(
         //if(game.value?.gameMode!!)
         //game.value = game.value
         //savedState[SAVED_STATE_KEY] = game.value
+        setTimer()
         updateCloudGame()
-        //setTimer()
     }
 
     private fun isFinished() = game.value?.currentRoundNumber == game.value?.roundsNum

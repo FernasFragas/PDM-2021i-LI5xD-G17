@@ -5,12 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import androidx.activity.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_show.view.*
 import pt.isel.pdm.drag.utils.Keys
 import pt.isel.pdm.drag.databinding.ActivityShowBinding
 import pt.isel.pdm.drag.draw_activity.DragViewModel
 import pt.isel.pdm.drag.draw_activity.model.DragGame
 import pt.isel.pdm.drag.draw_activity.model.Position
+import pt.isel.pdm.drag.utils.ChallengeInfo
 
 private const val SWIPE_RANGE = 40
 
@@ -42,7 +45,20 @@ class ShowModel {
 class ShowActivity : AppCompatActivity() {
 
     private val binding: ActivityShowBinding by lazy { ActivityShowBinding.inflate(layoutInflater) }
-    private val viewModel: DragViewModel by viewModels()
+
+    private val viewModel: DragViewModel by viewModels {
+        @Suppress("UNCHECKED_CAST")
+        object: ViewModelProvider.Factory {
+            override fun <VM : ViewModel?> create(modelClass: Class<VM>): VM {
+                return DragViewModel(application, challenge) as VM
+            }
+        }
+    }
+
+    private val challenge: ChallengeInfo by lazy {
+        intent.getParcelableExtra<ChallengeInfo>(Keys.CHALLENGE_INFO.name) ?:
+        throw IllegalArgumentException("Mandatory extra ${Keys.CHALLENGE_INFO.name} not present")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +67,7 @@ class ShowActivity : AppCompatActivity() {
 
         val model = intent.getParcelableExtra<DragGame>(Keys.GAME_KEY.name)
         viewModel.game.value?.allDraws = model!!.allDraws
-        viewModel.game.value?.currentRound = model.allDraws[model.currentRoundNumber]
+        viewModel.game.value?.currentRound = model.allDraws[model.currentRoundNumber-1]
         viewModel.game.value?.playersNum = model.playersNum
         viewModel.game.value?.roundsNum = model.roundsNum
         updateVisually()
