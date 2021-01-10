@@ -7,6 +7,7 @@ import pt.isel.pdm.drag.draw_activity.model.DragGame
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
 import pt.isel.pdm.drag.utils.runDelayed
+import pt.isel.pdm.drag.utils.Timers
 
 /**
  * no construtor desta classe vai ser passado uma instancia de um tipo que tem um estado da activity
@@ -52,6 +53,15 @@ class LocalDragViewModel(private val savedState: SavedStateHandle) : ViewModel()
      * quando estamos a iniciar um novo jogo
      */
     fun startGame(playersNum: Int, rounds: Int) {
+        if (game.value?.playersNum == 0) {
+            game.value?.playersNum = playersNum
+            game.value?.roundsNum = rounds
+            game.value?.createDrawingContainer()
+            game.value = game.value
+            savedState[SAVED_STATE_KEY] = game.value
+            setTimer()
+        }
+        /*
         game.value?.state = State.NEW_ROUND
         game.value?.gameMode = false
 
@@ -64,13 +74,22 @@ class LocalDragViewModel(private val savedState: SavedStateHandle) : ViewModel()
             setTimer()
         }
         changeState()
+
+         */
     }
 
     private fun setTimer() {
         val roundBeforeTimer = game.value?.currentRoundNumber
         val idBeforeTimer = game.value?.currentID
         val stateBeforeTimer = game.value?.state
-        runDelayed(6000L) {
+        var seconds = when (stateBeforeTimer){
+            State.DRAWING -> Timers.DRAWING_TIME.time
+            State.GUESSING -> Timers.GUESSING_TIME.time
+            State.FINISH_SCREEN -> Timers.FINISH_TIME.time
+            State.NEW_ROUND -> Timers.NEW_ROUND_TIME.time
+            else -> 0
+        }
+        runDelayed(seconds * 1000L) {
             if (game.value?.currentID == idBeforeTimer
                     && game.value?.state == stateBeforeTimer
                     && game.value?.currentRoundNumber == roundBeforeTimer
@@ -85,6 +104,29 @@ class LocalDragViewModel(private val savedState: SavedStateHandle) : ViewModel()
      * verifica se é para desenhar ou advinhar
      */
     fun changeState() {
+        when (game.value?.state) {
+            State.DRAWING -> game.value?.state = State.GUESSING
+            State.GUESSING -> {
+                var word = getGuess()
+                if (word == "") {
+                    word = "NO GUESS FOUND"
+                    game.value?.addGuessedWord(word)
+                }
+
+                addPlayerID()
+
+                updateGuessingState()
+
+                game.value?.addOriginalWord(word)
+
+            }
+            State.NEW_ROUND -> game.value?.state = State.DRAWING
+            State.FINISH_SCREEN -> {game.value?.state = State.CHANGE_ACTIVITY }
+        }
+        game.value = game.value
+        savedState[SAVED_STATE_KEY] = game.value
+        setTimer()
+        /*
         when (game.value?.state) {
             State.DRAWING -> {
                 game.value?.state = State.GUESSING
@@ -117,6 +159,8 @@ class LocalDragViewModel(private val savedState: SavedStateHandle) : ViewModel()
         }
         game.value = game.value
         savedState[SAVED_STATE_KEY] = game.value
+
+         */
     }
 
     private fun isFinished() = game.value?.currentRoundNumber == game.value?.roundsNum

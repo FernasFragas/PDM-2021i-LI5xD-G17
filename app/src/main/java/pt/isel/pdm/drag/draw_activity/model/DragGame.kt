@@ -34,12 +34,11 @@ data class DragGame(var playersNum: Int = 0,
                     var allDraws: MutableList<Array<Player>> = mutableListOf(),
                     var currentRound: Array<Player> = Array(playersNum) { Player() },
                     var currentID: Int = 0,
-                    var state: State = State.WAITING,
+                    var state: State = State.NEW_ROUND,
                     var gameMode: Boolean = true,
                     var currentRoundNumber: Int = 0
 ) : Parcelable{
 
-    //var currentID = 0
     var currentWord = ""
     //var currentRoundNumber = 0
     //var state = State.WAITING
@@ -65,6 +64,8 @@ data class DragGame(var playersNum: Int = 0,
         }
     }
 
+    fun getCurrentDraw() = currentRound[currentID].dragDraw
+    /*
     fun getCurrentDraw(): DragDraw {
         if (currentRound.size != 0) {
             if (gameMode) {
@@ -78,6 +79,8 @@ data class DragGame(var playersNum: Int = 0,
 
         return DragDraw()
     }
+
+     */
 
     fun getDrawBefore(): DragDraw {
         var id = currentID -1

@@ -61,7 +61,7 @@ class StartActivity : AppCompatActivity() {
                         "",
                         "",
                         model.playerCount.toLong(),
-                        -1,
+                        0,
                         model.roundCount.toLong())
                 )
                 putExtra(Keys.GAME_WORD_KEY.name, model.word)

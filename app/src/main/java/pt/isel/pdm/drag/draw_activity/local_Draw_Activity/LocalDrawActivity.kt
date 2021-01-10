@@ -50,6 +50,7 @@ class LocalDrawActivity : AppCompatActivity() {
     private fun changeActivity() {
         val intent = Intent(this, ShowActivity::class.java)
         intent.putExtra(Keys.GAME_KEY.name, viewModel.game.value!!)
+        intent.putExtra(Keys.CHALLENGE_INFO.name, challenge)
         startActivity(intent)
     }
 

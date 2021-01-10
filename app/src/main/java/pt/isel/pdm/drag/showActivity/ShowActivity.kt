@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.activity_show.view.*
 import pt.isel.pdm.drag.utils.Keys
 import pt.isel.pdm.drag.databinding.ActivityShowBinding
 import pt.isel.pdm.drag.draw_activity.DragViewModel
+import pt.isel.pdm.drag.draw_activity.LocalDragViewModel
 import pt.isel.pdm.drag.draw_activity.model.DragGame
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.utils.ChallengeInfo
@@ -106,6 +107,9 @@ class ShowActivity : AppCompatActivity() {
                 if (game.currentID != 0) {
                     game.currentID = game.currentID - 1
                     updateVisually()
+                } else {
+                    game.currentRoundNumber = (game.currentRoundNumber - 1) % game.roundsNum
+                    viewModel.game.value?.currentRound = game.allDraws[game.currentRoundNumber]
                 }
             }
             SwipeState.LEFT -> {
