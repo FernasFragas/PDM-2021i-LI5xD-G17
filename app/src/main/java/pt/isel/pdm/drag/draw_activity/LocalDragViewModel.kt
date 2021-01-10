@@ -52,6 +52,9 @@ class LocalDragViewModel(private val savedState: SavedStateHandle) : ViewModel()
      * quando estamos a iniciar um novo jogo
      */
     fun startGame(playersNum: Int, rounds: Int) {
+        game.value?.state = State.NEW_ROUND
+        game.value?.gameMode = false
+
         if (game.value?.playersNum == 0) {
             game.value?.playersNum = playersNum
             game.value?.roundsNum = rounds
@@ -60,6 +63,7 @@ class LocalDragViewModel(private val savedState: SavedStateHandle) : ViewModel()
             savedState[SAVED_STATE_KEY] = game.value
             setTimer()
         }
+        changeState()
     }
 
     private fun setTimer() {
@@ -84,6 +88,7 @@ class LocalDragViewModel(private val savedState: SavedStateHandle) : ViewModel()
         when (game.value?.state) {
             State.DRAWING -> {
                 game.value?.state = State.GUESSING
+                addPlayerID()
             }
 
 
@@ -110,6 +115,8 @@ class LocalDragViewModel(private val savedState: SavedStateHandle) : ViewModel()
                 game.value?.state = State.NEW_ROUND
             }
         }
+        game.value = game.value
+        savedState[SAVED_STATE_KEY] = game.value
     }
 
     private fun isFinished() = game.value?.currentRoundNumber == game.value?.roundsNum
@@ -122,18 +129,8 @@ class LocalDragViewModel(private val savedState: SavedStateHandle) : ViewModel()
             else
                 game.value?.state = State.NEW_ROUND
         } else {
-            if (!game.value?.gameMode!!)
-                game.value?.state = State.GUESSING
-            else
-                game.value?.state = State.DRAWING
+            game.value?.state = State.DRAWING
         }
-    }
-
-    /**
-     * metodo talvez necessario para os varios jogadores
-     */
-    fun initiatePlayerDragDraw() {
-        game.value?.startNewDraw()
     }
 
     /**

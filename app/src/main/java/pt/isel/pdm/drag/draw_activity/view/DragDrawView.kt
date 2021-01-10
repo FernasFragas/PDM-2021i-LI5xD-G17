@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import pt.isel.pdm.drag.draw_activity.DragViewModel
+import pt.isel.pdm.drag.draw_activity.LocalDragViewModel
 import pt.isel.pdm.drag.draw_activity.model.DragDraw
 
 /**
@@ -61,8 +62,15 @@ class DragDrawView(ctx: Context, attrs: AttributeSet) : View(ctx, attrs) {
             field = value
         }
 
+    var localViewModel : LocalDragViewModel? = null
+        set(value) {
+            field = value
+        }
+
     private fun getDragDraws(): DragDraw? {
-        return viewModel?.game?.value?.getCurrentDraw()
+        if (viewModel != null)
+            return viewModel?.game?.value?.getCurrentDraw()
+        return localViewModel?.game?.value?.getCurrentDraw()
     }
 
 }

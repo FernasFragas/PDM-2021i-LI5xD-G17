@@ -1,4 +1,4 @@
-package pt.isel.pdm.drag.draw_activity.local_Draw_Activity
+package pt.isel.pdm.drag.draw_activity.online_Draw_Activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,7 +7,6 @@ import android.view.MotionEvent.*
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import pt.isel.pdm.drag.utils.Keys
@@ -15,7 +14,6 @@ import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityDrawBinding
 import pt.isel.pdm.drag.draw_activity.DragViewModel
 import pt.isel.pdm.drag.draw_activity.LocalDragViewModel
-import pt.isel.pdm.drag.draw_activity.model.MyOnlineID
 import pt.isel.pdm.drag.draw_activity.model.Position
 import pt.isel.pdm.drag.draw_activity.model.State
 import pt.isel.pdm.drag.list_games_activity.ListGamesActivity

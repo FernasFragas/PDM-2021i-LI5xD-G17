@@ -10,7 +10,8 @@ import kotlinx.android.synthetic.main.activity_start_layout.*
 import pt.isel.pdm.drag.utils.Keys
 import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.databinding.ActivityStartLayoutBinding
-import pt.isel.pdm.drag.draw_activity.local_Draw_Activity.DrawActivity
+import pt.isel.pdm.drag.draw_activity.local_Draw_Activity.LocalDrawActivity
+import pt.isel.pdm.drag.draw_activity.online_Draw_Activity.DrawActivity
 import pt.isel.pdm.drag.utils.ChallengeInfo
 
 class StartActivity : AppCompatActivity() {
@@ -55,7 +56,7 @@ class StartActivity : AppCompatActivity() {
 
         binding.start.setOnClickListener {
             model.word = name.text.toString()
-            val intent = Intent(this, DrawActivity::class.java).apply {
+            val intent = Intent(this, LocalDrawActivity::class.java).apply {
                 putExtra(Keys.CHALLENGE_INFO.name, ChallengeInfo(
                         "",
                         "",

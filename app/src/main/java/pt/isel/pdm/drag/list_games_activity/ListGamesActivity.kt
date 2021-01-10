@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -15,9 +14,8 @@ import pt.isel.pdm.drag.R
 import pt.isel.pdm.drag.addNewGameActivity.AddGameActivity
 import pt.isel.pdm.drag.addNewGameActivity.RESULT_EXTRA
 import pt.isel.pdm.drag.databinding.ActivityListGamesLayoutBinding
-import pt.isel.pdm.drag.draw_activity.local_Draw_Activity.DrawActivity
-import pt.isel.pdm.drag.draw_activity.local_Draw_Activity.LOCAL_PLAYER_EXTRA_ID
-import pt.isel.pdm.drag.draw_activity.model.MyOnlineID
+import pt.isel.pdm.drag.draw_activity.online_Draw_Activity.DrawActivity
+import pt.isel.pdm.drag.draw_activity.online_Draw_Activity.LOCAL_PLAYER_EXTRA_ID
 import pt.isel.pdm.drag.list_games_activity.view.ChallengesListAdapter
 import pt.isel.pdm.drag.utils.ChallengeInfo
 import pt.isel.pdm.drag.utils.Keys
