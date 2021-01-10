@@ -151,6 +151,7 @@ class DrawActivity : AppCompatActivity() {
         val intent = Intent(this, ShowActivity::class.java)
         intent.putExtra(Keys.GAME_KEY.name, viewModel.game.value!!)
         intent.putExtra(Keys.CHALLENGE_INFO.name, challenge)
+        intent.putExtra(Keys.GAME_MODE.name, true)
         startActivity(intent)
     }
 

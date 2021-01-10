@@ -57,21 +57,41 @@ class ShowActivity : AppCompatActivity() {
         }
     }
 
+    private val localViewModel: LocalDragViewModel by viewModels()
+
     private val challenge: ChallengeInfo by lazy {
         intent.getParcelableExtra<ChallengeInfo>(Keys.CHALLENGE_INFO.name) ?:
         throw IllegalArgumentException("Mandatory extra ${Keys.CHALLENGE_INFO.name} not present")
     }
 
+    private  var isOnline: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        binding.showDraw.viewModel = viewModel
 
-        val model = intent.getParcelableExtra<DragGame>(Keys.GAME_KEY.name)
-        viewModel.game.value?.allDraws = model!!.allDraws
-        viewModel.game.value?.currentRound = model.allDraws[model.currentRoundNumber-1]
-        viewModel.game.value?.playersNum = model.playersNum
-        viewModel.game.value?.roundsNum = model.roundsNum
+        isOnline = intent.getBooleanExtra(Keys.GAME_MODE.name,false)
+
+
+        if(isOnline)
+            binding.showDraw.viewModel = viewModel
+        else
+            binding.showDraw.localViewModel = localViewModel
+
+        if(isOnline) {
+            val model = intent.getParcelableExtra<DragGame>(Keys.GAME_KEY.name)
+            viewModel.game.value?.allDraws = model!!.allDraws
+            viewModel.game.value?.currentRound = model.allDraws[model.currentRoundNumber - 1]
+            viewModel.game.value?.playersNum = model.playersNum
+            viewModel.game.value?.roundsNum = model.roundsNum
+        }
+        else {
+            val model = intent.getParcelableExtra<DragGame>(Keys.GAME_KEY.name)
+            localViewModel.game.value?.allDraws = model!!.allDraws
+            localViewModel.game.value?.currentRound = model.allDraws[model.currentRoundNumber - 1]
+            localViewModel.game.value?.playersNum = model.playersNum
+            localViewModel.game.value?.roundsNum = model.roundsNum
+        }
         updateVisually()
 
 
@@ -99,8 +119,13 @@ class ShowActivity : AppCompatActivity() {
 
     //TODO PROBLEMA DE LOGICA
     private fun doSwipe(swipeState: SwipeState) {
-
-        val game = viewModel.game.value!!
+        val game: DragGame
+        if (isOnline) {
+             game = viewModel.game.value!!
+        }
+        else {
+            game =  localViewModel.game.value!!
+        }
 
         when(swipeState) {
             SwipeState.RIGHT -> {
@@ -109,7 +134,11 @@ class ShowActivity : AppCompatActivity() {
                     updateVisually()
                 } else {
                     game.currentRoundNumber = (game.currentRoundNumber - 1) % game.roundsNum
-                    viewModel.game.value?.currentRound = game.allDraws[game.currentRoundNumber]
+                    if (isOnline && game.currentRoundNumber >= 0) {
+                        viewModel.game.value?.currentRound = game.allDraws[game.currentRoundNumber]
+                    } else if (game.currentRoundNumber >= 0) {
+                        localViewModel.game.value?.currentRound = game.allDraws[game.currentRoundNumber]
+                    }
                 }
             }
             SwipeState.LEFT -> {
@@ -119,7 +148,11 @@ class ShowActivity : AppCompatActivity() {
                 }
                 else {
                     game.currentRoundNumber = (game.currentRoundNumber + 1) % game.roundsNum
-                    viewModel.game.value?.currentRound = game.allDraws[game.currentRoundNumber]
+                    if (isOnline) {
+                        viewModel.game.value?.currentRound = game.allDraws[game.currentRoundNumber]
+                    } else {
+                        localViewModel.game.value?.currentRound = game.allDraws[game.currentRoundNumber]
+                    }
                 }
             }
         }
@@ -127,8 +160,14 @@ class ShowActivity : AppCompatActivity() {
     }
 
     private fun updateVisually() {
-        binding.roundNumberShow.text = "${(viewModel.game.value!!.currentRoundNumber + 1)}"
-        binding.originalWordShow.text = viewModel.game.value?.getOriginal()
-        binding.guessedWordShow.text = viewModel.game.value?.getGuess()
+        if (isOnline) {
+            binding.roundNumberShow.text = "${(viewModel.game.value!!.currentRoundNumber + 1)}"
+            binding.originalWordShow.text = viewModel.game.value?.getOriginal()
+            binding.guessedWordShow.text = viewModel.game.value?.getGuess()
+        } else {
+            binding.roundNumberShow.text = "${(localViewModel.game.value!!.currentRoundNumber + 1)}"
+            binding.originalWordShow.text = localViewModel.game.value?.getOriginal()
+            binding.guessedWordShow.text = localViewModel.game.value?.getGuess()
+        }
     }
 }

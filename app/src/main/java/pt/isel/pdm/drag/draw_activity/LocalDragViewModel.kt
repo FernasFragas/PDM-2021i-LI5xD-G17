@@ -22,32 +22,7 @@ class LocalDragViewModel(private val savedState: SavedStateHandle) : ViewModel()
     val game: MutableLiveData<DragGame> by lazy {
         MutableLiveData<DragGame>(savedState.get<DragGame>(SAVED_STATE_KEY) ?: DragGame())
     }
-/*
-    val time: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>(0)
-    }
 
-    fun changeTimer(millis: Long) {
-        /*
-        if(time.value == false) {
-            runDelayed(millis) {
-                game.value?.timer = game.value?.timer!! + 1
-                time.value = true
-            }
-        } else { time.value = false }
-        */
-        /*
-        runDelayed(millis) {
-            game.value?.timer = game.value?.timer!! + 1
-            time.value = time.value!! + 1
-            savedState[SAVED_STATE_KEY] = game.value
-            changeTimer(millis)
-        }
-
-         */
-
-    }
-*/
     /**
      * passa os valores que vêm da startActivity, para a nossa representação logica do jogo
      * quando estamos a iniciar um novo jogo
@@ -57,6 +32,8 @@ class LocalDragViewModel(private val savedState: SavedStateHandle) : ViewModel()
             game.value?.playersNum = playersNum
             game.value?.roundsNum = rounds
             game.value?.createDrawingContainer()
+            game.value?.state = State.NEW_ROUND
+            game.value?.gameMode = false
             game.value = game.value
             savedState[SAVED_STATE_KEY] = game.value
             setTimer()
@@ -126,41 +103,7 @@ class LocalDragViewModel(private val savedState: SavedStateHandle) : ViewModel()
         game.value = game.value
         savedState[SAVED_STATE_KEY] = game.value
         setTimer()
-        /*
-        when (game.value?.state) {
-            State.DRAWING -> {
-                game.value?.state = State.GUESSING
-                addPlayerID()
-            }
 
-
-            State.GUESSING -> {
-                var word = getGuess()
-                if (word == "") {
-                    word = "NO GUESS FOUND"
-                    game.value?.addGuessedWord(word)
-                }
-                addPlayerID()
-
-                updateGuessingState()
-
-                game.value?.addOriginalWord(word)
-
-            }
-            State.NEW_ROUND -> {
-                game.value?.state = State.DRAWING
-            }
-            State.FINISH_SCREEN -> {
-                game.value?.state = State.CHANGE_ACTIVITY
-            }
-            State.WAITING -> {
-                game.value?.state = State.NEW_ROUND
-            }
-        }
-        game.value = game.value
-        savedState[SAVED_STATE_KEY] = game.value
-
-         */
     }
 
     private fun isFinished() = game.value?.currentRoundNumber == game.value?.roundsNum

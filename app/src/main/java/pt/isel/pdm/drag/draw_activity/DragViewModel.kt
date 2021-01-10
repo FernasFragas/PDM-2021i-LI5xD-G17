@@ -55,17 +55,6 @@ class DragViewModel(
     }
 
 
-
-    /*val offlineGame: MutableLiveData<DragGame> by lazy {
-       MutableLiveData<DragGame>(savedState.get<DragGame>(SAVED_STATE_KEY) ?: DragGame())
-    }*/
-
-/*
-    /**fica com o estado passado antes do jogador**/
-    val myState: MutableLiveData<State> by lazy {
-        MutableLiveData<State>(savedState.get<State>(SAVED_STATE_KEY) ?: State.WAITING)
-    }*/
-
     /**
      * representations of the game in the local repository
      */
@@ -190,10 +179,7 @@ class DragViewModel(
             else
                 game.value?.state = State.NEW_ROUND
         } else {
-            if(!game.value?.gameMode!!)
-                game.value?.state = State.GUESSING
-            else
-                game.value?.state = State.DRAWING
+            game.value?.state = State.DRAWING
         }
     }
 

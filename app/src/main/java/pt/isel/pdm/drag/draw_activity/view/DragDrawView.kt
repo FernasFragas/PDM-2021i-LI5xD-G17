@@ -69,8 +69,8 @@ class DragDrawView(ctx: Context, attrs: AttributeSet) : View(ctx, attrs) {
 
     private fun getDragDraws(): DragDraw? {
         if (viewModel != null)
-            return viewModel?.game?.value?.getCurrentDraw()
-        return localViewModel?.game?.value?.getCurrentDraw()
+            return viewModel?.game?.value?.getDraw()
+        return localViewModel?.game?.value?.getDraw()
     }
 
 }
